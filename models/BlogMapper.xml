@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BlogMapper">  
+  <select id="selectCategoryList">
+      SELECT 
+        category_id
+        , category_name
+      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl
+      WHERE ca.blog_id = bl.blog_id
+      AND bl.user_id = #{owner_id}
+  </select>
+  <select id="selectPostList">
+      SELECT 
+        post_id
+          , post_name
+        , category_name
+        , post_content
+        , create_dt
+      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po
+      WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
+      AND bl.user_id = #{owner_id}
+      order by po.create_dt desc
+  </select>
+  <select id="selectPostView">
+      SELECT 
+        post_name
+        , category_name
+        , post_content
+        , create_dt
+      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po
+      WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
+      AND bl.user_id = #{owner_id} AND po.post_id = #{post_id} 
+  </select>
+  <select id="selectBlogName">
+      SELECT 
+        blog_name
+      FROM good_blog.tb_blogs bl
+      WHERE bl.user_id = #{owner_id}
+  </select>
+</mapper>

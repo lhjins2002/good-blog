@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ManageMapper">  
+  <select id="selectCategoryList">
+      SELECT 
+        category_id
+        , category_name
+        , category_order
+      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl
+      WHERE ca.blog_id = bl.blog_id
+      AND bl.user_id = #{owner_id}
+  </select>
+  <select id="selectPostList">
+      SELECT 
+        post_id
+          , post_name
+        , category_name
+        , post_content
+        , create_dt
+      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po
+      WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
+      AND bl.user_id = #{owner_id}
+  </select>
+  <insert id="insertCategory">
+      INSERT INTO good_blog.tb_categorys
+      (blog_id,
+      category_name,
+      category_order,
+      use_yn)
+      VALUES
+      ((SELECT blog_id FROM good_blog.tb_blogs WHERE user_id = #{owner_id}),
+      #{category_name},
+      #{category_order},
+      'Y')
+  </insert>
+  <insert id="insertPost">
+      INSERT INTO good_blog.tb_posts
+      (category_id,
+      post_name,
+      post_content,
+      create_dt,
+      update_dt,
+      use_yn,
+      thumbnail)
+      VALUES
+      (#{category_id},
+      #{post_name},
+      #{post_content},
+      SYSDATE(),
+      SYSDATE(),
+      'Y',
+      #{thumbnail})
+  </insert>
+  <select id="selectBlog">
+      SELECT 
+        blog_id
+        , blog_name
+        , blog_theme
+      FROM good_blog.tb_blogs
+      WHERE user_id = #{owner_id}
+  </select>
+  <update id="updateBlog">
+      UPDATE good_blog.tb_blogs
+      SET blog_name = #{blog_name},
+          blog_theme = #{blog_theme}
+      WHERE blog_id = #{blog_id}
+  </update>
+  <select id="selectProfile">
+      SELECT 
+        user_name
+        , photo
+      FROM good_blog.tb_users
+      WHERE user_id = #{owner_id}
+  </select>
+  <update id="updateProfile">
+      UPDATE good_blog.tb_users
+      SET user_name = #{user_name},
+          photo = #{photo}
+      WHERE user_id = #{owner_id}
+  </update>
+</mapper>

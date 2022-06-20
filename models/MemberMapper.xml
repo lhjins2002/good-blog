@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MemberMapper">  
+  <insert id="insertMember">
+      INSERT INTO good_blog.tb_users
+      (user_id,
+      user_name,
+      user_password,
+      use_yn)
+      VALUES
+      (#{user_id},
+      #{user_name},
+      #{user_password},
+      'Y');
+      INSERT INTO good_blog.tb_blogs
+      (blog_name,
+      user_id,
+      use_yn)
+      VALUES
+      (#{blog_name},
+      #{user_id},
+      'Y');
+  </insert>
+  <select id="selectLoginCheck">
+      SELECT
+      user_id,
+      user_name,
+      user_password,
+      photo
+      FROM
+      good_blog.tb_users
+      WHERE use_yn = 'Y'
+      AND user_id = #{user_id}
+  </select>
+  <select id="selectSessionLoginCheck">
+      SELECT
+      user_id,
+      user_name,
+      user_password
+      FROM
+      good_blog.tb_users
+      WHERE use_yn = 'Y'
+      AND user_id = #{user_id}
+      AND user_password = #{user_password}
+  </select>
+</mapper>
