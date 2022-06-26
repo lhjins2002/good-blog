@@ -5,22 +5,9 @@ import Typography from '@mui/material/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import {TwitterPicker} from 'react-color';
+import reactCSS from 'reactcss'
 
 class ManageBlog extends React.Component {
     constructor(props) {
@@ -31,6 +18,7 @@ class ManageBlog extends React.Component {
             blog_id:'',
             blog_name:'',
             blog_theme:'',
+            displayColorPicker:false,
         }
     }
 
@@ -70,14 +58,6 @@ class ManageBlog extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
-    handleClickOpen = () => {
-        this.setState({modalOpen : true});
-    };
-    
-    handleClose = () => {
-        this.setState({modalOpen : false});
-    };
-
     handleSubmit = (event) => {
 
         const data = new FormData(event.currentTarget);
@@ -89,7 +69,50 @@ class ManageBlog extends React.Component {
         }
     };
 
+    handleClick = () => {
+        this.setState({ displayColorPicker: !this.state.displayColorPicker })
+      };
+    
+      handleClose = () => {
+        this.setState({ displayColorPicker: false })
+      };
+
+    handleChange = (color) => {
+        this.setState({ blog_theme: color.hex })
+      };
+
     render () {
+
+        const styles = reactCSS({
+            'default': {
+              color: {
+                width: '36px',
+                height: '36px',
+                borderRadius: '2px',
+                background: `${ this.state.blog_theme }`,
+              },
+              swatch: {
+                padding: '5px',
+                background: '#fff',
+                borderRadius: '1px',
+                boxShadow: '0 0 0 1px rgba(0,0,0,.1)',
+                display: 'inline-block',
+                cursor: 'pointer',
+              },
+              popover: {
+                position: 'absolute',
+                zIndex: '2',
+              },
+              cover: {
+                position: 'fixed',
+                top: '0px',
+                right: '0px',
+                bottom: '0px',
+                left: '0px',
+              },
+            },
+          });
+
         return (
             <Container>
                 <Box sx={{ minWidth: 275 }} style={{marginTop:16}} component="form" noValidate onSubmit={this.handleSubmit}>
@@ -114,6 +137,18 @@ class ManageBlog extends React.Component {
                         id="blogName"
                         autoComplete="blogName"
                         />
+                    </div>
+                    <div style={{marginTop:16}}>
+                    <div>
+                        <div style={ styles.swatch } onClick={ this.handleClick }>
+                        <div style={ styles.color } />
+                        </div>
+                        { this.state.displayColorPicker ? <div style={ styles.popover }>
+                        <div style={ styles.cover } onClick={ this.handleClose }/>
+                        <TwitterPicker color={ this.state.blog_theme } onChange={ this.handleChange } />
+                        </div> : null }
+
+                    </div>
                     </div>
                 </Box>
             </Container>

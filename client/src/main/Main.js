@@ -19,15 +19,13 @@ import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import MainList from './MainList';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import cookie from 'react-cookies';
 import axios from 'axios';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
-import { Avatar } from '@mui/material';
+import {Avatar} from '@mui/material';
 import { createTheme } from '@mui/material';
 
 const drawerWidth = 240;
@@ -151,7 +149,6 @@ export default function Main() {
     axios.post('/member?type=SessionConfirm', {
         token1 : cookie.load("userid"),
         token2 : cookie.load("username"),
-        token3 : cookie.load("photo"),
     })
     .then( response => {
         try {
@@ -162,7 +159,7 @@ export default function Main() {
 
             setLoginId(response.data.token1);
             setLoginName(response.data.token2);
-            setPhoto(response.data.token3);
+            setPhoto(cookie.load("photo"));
 
           }
         } catch (error) {
@@ -186,7 +183,6 @@ export default function Main() {
           >
             <MenuIcon />
           </IconButton>
-          <ThumbUpIcon sx={{ mr: 1 }} />
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Good Blog
           </Typography>

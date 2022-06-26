@@ -1,18 +1,13 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
 import { withRouter } from '../common/withRouter';
-import { CardHeader } from '@mui/material';
-import { Avatar } from '@mui/material';
-import { IconButton } from '@mui/material';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { CardMedia } from '@mui/material';
+import Avatar from '@mui/joy/Avatar';
+import AspectRatio from '@mui/joy/AspectRatio';
+import Box from '@mui/joy/Box';
+import Card from '@mui/joy/Card';
+import Typography from '@mui/joy/Typography';
+import { CssVarsProvider } from '@mui/joy/styles';
 
 
 class MainList extends React.Component {
@@ -61,33 +56,30 @@ class MainList extends React.Component {
             var postContent = data.post_content.replace(extractTextPattern, ' ');
 
             result.push(
-                <Box sx={{ minWidth: 275 }} key={data.post_id} style={{marginTop:16}}>
-                    <Card variant="outlined" onClick={this.handlePostClick.bind(this, data.user_id, data.post_id)} >
-                        <CardHeader
-                            avatar={
-                                <Avatar alt={data.user_name} src={"/image/" + data.photo} />
-                            }
-                            action={
-                            <IconButton aria-label="settings">
-                                <MoreVertIcon />
-                            </IconButton>
-                            }
-                            title={data.post_name}
-                            subheader={reg_date}
+                <Card variant="outlined" sx={{ minWidth: '320px' }} key={data.post_id} style={{marginTop:16}} onClick={this.handlePostClick.bind(this, data.user_id, data.post_id)}>
+                    <Box sx={{ display: 'flex', gap: 1.5 }}>
+                        <Avatar alt={data.user_name} src={"/image/" + data.photo} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
+                                {data.post_name}
+                            </Typography>
+                            <Typography level="body2">{reg_date}</Typography>
+                        </Box>
+                    </Box>
+                        {data.thumbnail && <AspectRatio minHeight="120px" maxHeight="200px" sx={{ my: 2 }}>
+                        <img
+                            src={"/image/" + data.thumbnail}
+                            alt=""
                         />
-                        {data.thumbnail && <CardMedia
-                            component="img"
-                            height="194"
-                            image={"/image/" + data.thumbnail}
-                            alt={data.post_name}
-                        />}
-                        <CardContent>
-                            <Typography variant="body2" color="text.secondary" sx={{height:40, overflow:'hidden'}}>
+                        </AspectRatio> }
+                        <Box sx={{ display: 'flex' }}>
+                        <div>
+                            <Typography level="body2">
                                 {postContent}
                             </Typography>
-                        </CardContent>
-                    </Card>
-                </Box>
+                        </div>
+                    </Box>
+                </Card>
             )
         }
         return result
@@ -96,7 +88,9 @@ class MainList extends React.Component {
     render () {
         return (
             <Container>
-                 {this.state.append_MainList}
+                <CssVarsProvider>
+                    {this.state.append_MainList}
+                </CssVarsProvider>
             </Container>
         );
     }

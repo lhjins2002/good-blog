@@ -16,6 +16,7 @@
         , category_name
         , post_content
         , create_dt
+        , thumbnail
       FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po
       WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
       AND bl.user_id = #{owner_id}
@@ -27,13 +28,15 @@
         , category_name
         , post_content
         , create_dt
+        , thumbnail
       FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po
       WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
       AND bl.user_id = #{owner_id} AND po.post_id = #{post_id} 
   </select>
-  <select id="selectBlogName">
+  <select id="selectBlogInfo">
       SELECT 
-        blog_name
+        blog_name,
+        blog_theme
       FROM good_blog.tb_blogs bl
       WHERE bl.user_id = #{owner_id}
   </select>

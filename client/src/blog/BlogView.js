@@ -23,6 +23,7 @@ class BlogView extends React.Component {
             rows: [],
             text: '',
             subject: '',
+            thumbnail:'',
         }
 
     }
@@ -40,7 +41,8 @@ class BlogView extends React.Component {
             try {
                 this.setState({ rows: response.data.json,
                                 text: response.data.json[0].post_content,
-                                subject: response.data.json[0].post_name
+                                subject: response.data.json[0].post_name,
+                                thumbnail: response.data.json[0].thumbnail
                 });
                 
             } catch (error) {
@@ -79,7 +81,12 @@ class BlogView extends React.Component {
                     <Typography variant="h5" component="div">
                         {this.state.subject}
                     </Typography>
-                    
+                    {this.state.thumbnail && <div style={{marginTop:16}}>
+                        <img
+                            src={"/image/" + this.state.thumbnail}
+                            alt=""
+                            />
+                    </div>}
                     <div style={{marginTop:16}}>
                         <ReactQuill theme={"bubble"}
                                     value={this.state.text}

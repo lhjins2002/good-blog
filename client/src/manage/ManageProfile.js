@@ -22,6 +22,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Avatar } from '@mui/material';
+import cookie from 'react-cookies';
 
 class ManageProfile extends React.Component {
     constructor(props) {
@@ -61,6 +62,7 @@ class ManageProfile extends React.Component {
         })
         .then( response => {
             try {
+                cookie.save("photo", this.state.photo);
                 this.callProfileApi();
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');

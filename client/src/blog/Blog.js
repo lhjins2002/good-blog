@@ -22,12 +22,12 @@ import cookie from 'react-cookies';
 import axios from 'axios';
 import { Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import ManageBlog from '../manage/ManageBlog';
 import ManageProfile from '../manage/ManageProfile';
-import { Avatar } from '@mui/material';
+import {Avatar} from '@mui/material';
+import { createTheme } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -76,7 +76,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export default function Blog() {
-  const theme = useTheme();
+  //const theme = useTheme();
   let { owner_id } = useParams();
   let { post_id } = useParams();
   const navigate = useNavigate();
@@ -92,6 +92,18 @@ export default function Blog() {
   const [manageMenuArea, setManageMenuArea] = React.useState(null);
 
   const [blogName, setBlogName] = React.useState("");
+  const [blogTheme, setBlogTheme] = React.useState("");
+
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: blogTheme == ''?"#333D51":blogTheme,
+      },
+      secondary: {
+        main: "#D3AC2B",
+      },
+    },
+  });
 
   const location = useLocation();
   let isManage = false;
@@ -147,12 +159,13 @@ export default function Blog() {
   }
 
   const getBlogName = (user_id) => {
-    axios.post('/blog?type=blogname', {
+    axios.post('/blog?type=bloginfo', {
         owner_id : user_id,
     })
     .then( response => {
         try {
           setBlogName(response.data.json[0].blog_name);
+          setBlogTheme(response.data.json[0].blog_theme);
         } catch (error) {
             alert('작업중 오류가 발생하였습니다.');
         }
@@ -164,11 +177,15 @@ export default function Blog() {
     // 컴포넌트 마운팅된 후 실행
     axios.post('/member?type=SessionConfirm', {
         token1 : cookie.load("userid"),
-        token2 : cookie.load("username"),
-        token3 : cookie.load("photo"),
+        token2 : cookie.load("username")
     })
     .then( response => {
         try {
+
+          isManage = false;
+          if(location.pathname.startsWith("/manage")){
+            isManage = true;
+          }
 
           var user_id = "";
 
@@ -179,7 +196,7 @@ export default function Blog() {
             setAuth(true);
             setLoginId(response.data.token1);
             setLoginName(response.data.token2);
-            setPhoto(response.data.token3);
+            setPhoto(cookie.load("photo"));
 
             if(isManage){
               setManageContentArea(<Routes>
@@ -211,12 +228,12 @@ export default function Blog() {
         }
     })
     .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
-  }, []);
+  });
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position="fixed" open={open} theme={theme}>
         <Toolbar>
           <IconButton
             color="inherit"

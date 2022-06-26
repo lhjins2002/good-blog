@@ -85,7 +85,6 @@ export default function SignIn() {
           axios.post('/member?type=SessionState', {
               user_id: userid,
               user_name: username,
-              photo: photo,
           })
           .then( response => {
               cookie.save('userid', response.data.token1
@@ -94,7 +93,7 @@ export default function SignIn() {
               , { path: '/', expires })
               cookie.save('userpassword', upw
               , { path: '/', expires })
-              cookie.save('photo', response.data.token3
+              cookie.save('photo', photo
               , { path: '/', expires })
 
               navigate("/");

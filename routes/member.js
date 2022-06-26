@@ -52,7 +52,6 @@ router.post('/', (req, res, next) => {
         }else if(type == "SessionState"){
             var user_id = req.body.user_id
             var user_name = req.body.user_name
-            var photo = req.body.photo
             try {
             let token1 = jwt.sign(
             { id: user_id },
@@ -64,11 +63,7 @@ router.post('/', (req, res, next) => {
             secretObj.secret,
             { expiresIn: '60m' })
 
-            let token3 = jwt.sign(
-            { name: photo },
-            secretObj.secret,
-            { expiresIn: '60m' })
-            res.send({"token1":token1, "token2":token2, "token3":token3});
+            res.send({"token1":token1, "token2":token2});
             } catch (error) {
             res.send(error)
             }
@@ -76,13 +71,11 @@ router.post('/', (req, res, next) => {
             try {
             let token1 = req.body.token1;
             let token2 = req.body.token2;
-            let token3 = req.body.token3;
             
             if(token1 != undefined && token1 != '' & token2 != undefined && token2 != ''){
                 let decoded1 = jwt.verify(token1, secretObj.secret);
                 let decoded2 = jwt.verify(token2, secretObj.secret);
-                let decoded3 = jwt.verify(token3, secretObj.secret);
-                res.send({"token1":decoded1.id, "token2":decoded2.name, "token3":decoded3.name});
+                res.send({"token1":decoded1.id, "token2":decoded2.name});
             }else{
                 res.send({"token1":"", "token2":""});
             }

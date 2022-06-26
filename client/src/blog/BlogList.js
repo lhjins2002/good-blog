@@ -1,11 +1,14 @@
 import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import { Box } from '@mui/material';
 import { withRouter } from '../common/withRouter';
+import AspectRatio from '@mui/joy/AspectRatio';
+import Box from '@mui/joy/Box';
+import Link from '@mui/joy/Link';
+import Card from '@mui/joy/Card';
+import Chip from '@mui/joy/Chip';
+import Typography from '@mui/joy/Typography';
+import { CssVarsProvider } from '@mui/joy/styles';
 
 class BlogList extends React.Component {
     constructor(props) {
@@ -55,24 +58,35 @@ class BlogList extends React.Component {
             var postContent = data.post_content.replace(extractTextPattern, ' ');
 
             result.push(
-                <Box sx={{ minWidth: 275 }} key={data.post_id} style={{marginTop:16}}>
-                    <Card variant="outlined" onClick={this.handlePostClick.bind(this, data.post_id)}>
-                        <CardContent>
-                            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                {reg_date}
-                            </Typography>
-                            <Typography variant="h5" component="div">
-                                {data.post_name}
-                            </Typography>
-                            <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                {data.user_name}
-                            </Typography>
-                            <Typography variant="body2">
-                                {postContent}
-                            </Typography>
-                        </CardContent>
+                    <Card key={data.post_id} style={{marginTop:16}}
+                    variant="outlined" onClick={this.handlePostClick.bind(this, data.post_id)}
+                    row
+                    sx={{
+                        minWidth: '320px',
+                        gap: 2,
+                        '&:hover': { boxShadow: 'md', borderColor: 'neutral.outlinedHoverBorder' },
+                    }}
+                    >
+                        {data.thumbnail && <AspectRatio ratio="1" sx={{ minWidth: 90 }}>
+                            <img
+                            src={"/image/" + data.thumbnail}
+                            alt=""
+                            />
+                        </AspectRatio> }
+                        <Box>
+                            <Box sx={{ ml: 0.5 }}>
+                                <Typography level="h2" fontSize="lg" id="card-description" mb={0.5}>
+                                    {data.post_name}
+                                </Typography>
+                                <Typography fontSize="sm" aria-describedby="card-description" mb={1} sx={{ color: 'text.tertiary' }}>
+                                    {reg_date}
+                                </Typography>
+                                <Typography level="body2">
+                                    {postContent}
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Card>
-                </Box>
             )
         }
         return result
@@ -81,7 +95,9 @@ class BlogList extends React.Component {
     render () {
         return (
             <Container>
-                 {this.state.append_BlogList}
+                <CssVarsProvider>
+                        {this.state.append_BlogList}
+                </CssVarsProvider>
             </Container>
         );
     }
