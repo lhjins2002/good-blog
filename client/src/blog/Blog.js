@@ -97,7 +97,7 @@ export default function Blog() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: blogTheme == ''?"#333D51":blogTheme,
+        main: blogTheme == ''?"#ffffff":blogTheme,
       },
       secondary: {
         main: "#D3AC2B",
@@ -228,7 +228,7 @@ export default function Blog() {
         }
     })
     .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
-  });
+  }, [location]);
 
   return (
     <Box sx={{ display: 'flex' }}>

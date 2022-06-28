@@ -9,6 +9,7 @@ import ManageCategory from './manage/ManageCategory'
 import ManagePost from './manage/ManagePost'
 import ManageBlog from './manage/ManageBlog';
 import ManageProfile from './manage/ManageProfile';
+import './App.css'
 
 function App() {
   return (

@@ -1,17 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import AddIcon from '@mui/icons-material/Add';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css'
-import { TextField } from '@mui/material';
-import { FormControl } from '@mui/material';
-import { InputLabel } from '@mui/material';
-import { Select } from '@mui/material';
-import { MenuItem } from '@mui/material';
 
 class BlogView extends React.Component {
     constructor(props) {
@@ -82,7 +75,7 @@ class BlogView extends React.Component {
                         {this.state.subject}
                     </Typography>
                     {this.state.thumbnail && <div style={{marginTop:16}}>
-                        <img
+                        <img style={{maxWidth:'100%'}}
                             src={"/image/" + this.state.thumbnail}
                             alt=""
                             />
