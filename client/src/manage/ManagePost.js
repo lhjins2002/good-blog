@@ -98,14 +98,48 @@ class ManagePost extends React.Component {
         })
     }
 
+    // 이미지 처리를 하는 핸들러
+    imageHandler = () => {
+  
+    const input = document.createElement('input');
+    
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click(); 
+    
+    input.addEventListener('change', async () => {
+      const file = input.files[0];
+      
+      const formData = new FormData();
+      formData.append('file', file); 
+      try {
+        const result = await axios.post('/api/upload?type=uploads/image/', formData);
+        const IMG_URL = result.data.filename;
+        
+        const editor = this.quillRef.current.getEditor();
+        
+        const range = editor.getSelection();
+        
+        editor.insertEmbed(range.index, 'image', "/image/" + IMG_URL);
+      } catch (error) {
+        alert('작업중 오류가 발생하였습니다.')  
+      }
+    });
+  };
+
     modules = {
-        toolbar: [
+        toolbar: {
+            container: [
           [{ 'header': [1, 2, false] }],
           ['bold', 'italic', 'underline','strike', 'blockquote'],
           [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
           ['link', 'image'],
           ['clean']
-        ],
+            ],
+        handlers: {
+            image: this.imageHandler,
+          }
+        }
       }
      
       formats = [
@@ -114,6 +148,8 @@ class ManagePost extends React.Component {
         'list', 'bullet', 'indent',
         'link', 'image'
       ]
+
+      quillRef = React.createRef();
 
     render () {
         return (
@@ -166,7 +202,8 @@ class ManagePost extends React.Component {
                         <input type="file" name="file" onChange={this.handlePostImage}/>	
                     </div>
                     <div style={{marginTop:16}}>
-                        <ReactQuill theme="snow"
+                        <ReactQuill ref={this.quillRef}
+                                    theme="snow"
                                     modules={this.modules}
                                     formats={this.formats}
                                     value={this.state.text}

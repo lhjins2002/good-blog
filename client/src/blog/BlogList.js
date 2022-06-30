@@ -81,7 +81,7 @@ class BlogList extends React.Component {
                                 <Typography fontSize="sm" aria-describedby="card-description" mb={1} sx={{ color: 'text.tertiary' }}>
                                     {reg_date}
                                 </Typography>
-                                <Typography level="body2">
+                                <Typography level="body2" style={{maxHeight:42,overflow:'hidden'}}>
                                     {postContent}
                                 </Typography>
                             </Box>

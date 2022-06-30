@@ -72,8 +72,9 @@ class MainList extends React.Component {
                             alt=""
                         />
                         </AspectRatio> }
+                        {!data.thumbnail && <div style={{height:16}}></div>}
                         <Box sx={{ display: 'flex' }}>
-                        <div>
+                        <div style={{maxHeight:42, overflow:'hidden'}}>
                             <Typography level="body2">
                                 {postContent}
                             </Typography>
