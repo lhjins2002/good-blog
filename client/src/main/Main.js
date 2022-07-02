@@ -18,6 +18,14 @@ import { Container } from '@mui/system';
 import Avatar from '@mui/joy/Avatar';
 import { CssVarsProvider } from '@mui/joy/styles';
 import { Link } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import PostAddIcon from '@mui/icons-material/PostAdd';
+import PersonIcon from '@mui/icons-material/Person';
+import CategoryIcon from '@mui/icons-material/Category';
+import SettingsIcon from '@mui/icons-material/Settings';
+import BookIcon from '@mui/icons-material/Book';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
 export default function Main() {
   const theme = createTheme({
@@ -116,15 +124,45 @@ export default function Main() {
                   onClose={handleClose}
                 >
                   
-                  <MenuItem component={Link} to={"/blog/" + loginId}>내 블로그</MenuItem>
-                  <MenuItem component={Link} to="/manage/post">글 쓰기</MenuItem>
+                <MenuItem component={Link} to={"/blog/" + loginId}>
+                  <ListItemIcon>
+                    <BookIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>내 블로그</ListItemText>
+                </MenuItem>
+                <MenuItem component={Link} to="/manage/post">
+                  <ListItemIcon>
+                    <PostAddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>글 쓰기</ListItemText>
+                </MenuItem>
                   <Divider />
-                  <MenuItem component={Link} to="/manage/profile">프로필 설정</MenuItem>
-                  <MenuItem component={Link} to="/manage">블로그 설정</MenuItem>
-                  <MenuItem component={Link} to="/manage/category">카테고리 설정</MenuItem>
+                <MenuItem component={Link} to="/manage/profile">
+                  <ListItemIcon>
+                    <PersonIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>프로필 설정</ListItemText>
+                </MenuItem>
+                <MenuItem component={Link} to="/manage">
+                <ListItemIcon>
+                    <SettingsIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>블로그 설정</ListItemText>
+                </MenuItem>
+                <MenuItem component={Link} to="/manage/category">
+                  <ListItemIcon>
+                    <CategoryIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>카테고리 설정</ListItemText>
+                </MenuItem>
                   <Divider />
-                  <MenuItem onClick={logout}>로그아웃</MenuItem>
-                </Menu>
+                <MenuItem onClick={logout}>
+                  <ListItemIcon>
+                    <LogoutIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>로그아웃</ListItemText>
+                </MenuItem>
+              </Menu>
               </div>
             )}
           </Toolbar>

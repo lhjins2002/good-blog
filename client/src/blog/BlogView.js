@@ -1,10 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css'
+import Avatar from '@mui/joy/Avatar';
 
 class BlogView extends React.Component {
     constructor(props) {
@@ -17,6 +18,9 @@ class BlogView extends React.Component {
             text: '',
             subject: '',
             thumbnail:'',
+            user_name:'',
+            photo:'',
+            reg_date:'',
         }
 
     }
@@ -32,10 +36,20 @@ class BlogView extends React.Component {
         })
         .then( response => {
             try {
+
+                var date = response.data.json[0].create_dt
+                var year = date.substr(0,4)
+                var month = date.substr(5,2)
+                var day = date.substr(8,2)
+                var reg_date = year +'.'+month+'.'+day;
+
                 this.setState({ rows: response.data.json,
                                 text: response.data.json[0].post_content,
                                 subject: response.data.json[0].post_name,
-                                thumbnail: response.data.json[0].thumbnail
+                                thumbnail: response.data.json[0].thumbnail,
+                                user_name: response.data.json[0].user_name,
+                                photo: response.data.json[0].photo,
+                                reg_date: reg_date,
                 });
                 
             } catch (error) {
@@ -71,9 +85,18 @@ class BlogView extends React.Component {
         return (
             <Container>
                 <Box sx={{ minWidth: 275 }} style={{marginTop:16}} component="form" noValidate onSubmit={this.handleSubmit}>
-                    <Typography variant="h5" component="div">
+                    <Typography level="h5" component="div">
                         {this.state.subject}
                     </Typography>
+                    <Box sx={{ display: 'flex', gap: 1.5, marginTop:'16px' }}>
+                        <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} />
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+                            <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
+                                {this.state.user_name}
+                            </Typography>
+                            <Typography level="body2">{this.state.reg_date}</Typography>
+                        </Box>
+                    </Box>
                     {this.state.thumbnail && <div style={{marginTop:16}}>
                         <img style={{maxWidth:'100%'}}
                             src={"/image/" + this.state.thumbnail}

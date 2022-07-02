@@ -8,8 +8,6 @@ import Card from '@mui/joy/Card';
 import Typography from '@mui/joy/Typography';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CardOverflow from '@mui/joy/CardOverflow';
-import IconButton from '@mui/joy/IconButton';
-import Favorite from '@mui/icons-material/Favorite';
 import Avatar from '@mui/joy/Avatar';
 
 class BlogList extends React.Component {
