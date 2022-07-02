@@ -26,8 +26,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import ManageBlog from '../manage/ManageBlog';
 import ManageProfile from '../manage/ManageProfile';
-import {Avatar} from '@mui/material';
 import { createTheme } from '@mui/material';
+import { Container } from '@mui/system';
+import Avatar from '@mui/joy/Avatar';
+import { CssVarsProvider } from '@mui/joy/styles';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -131,26 +134,6 @@ export default function Blog() {
     navigate("/login");
   }
 
-  const goMyBlog = () => {
-    navigate("/blog/" + loginId);
-  }
-
-  const goManage = () => {
-    navigate("/manage");
-  }
-
-  const goManageCategory = () => {
-    navigate("/manage/category");
-  }
-
-  const goManagePost = () => {
-    navigate("/manage/post");
-  }
-
-  const goManageProfile = () => {
-    navigate("/manage/profile");
-  }
-
   const logout = () => {
     cookie.remove('userid', { path: '/'});
     cookie.remove('username', { path: '/'});
@@ -234,7 +217,8 @@ export default function Blog() {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar position="fixed" open={open} theme={theme}>
-        <Toolbar>
+      <Container>
+        <Toolbar className='mainToolbar'>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -251,7 +235,9 @@ export default function Blog() {
           {auth && (
             <div>
               <IconButton onClick={handleMenu} sx={{ p: 0 }} >
-                <Avatar alt={loginName} src={"/image/" + photo} />
+                <CssVarsProvider>
+                  <Avatar alt={loginName} src={"/image/" + photo} />
+                </CssVarsProvider>
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -268,18 +254,19 @@ export default function Blog() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={goManageProfile}>프로필 설정</MenuItem>
-                <Divider />
-                <MenuItem onClick={goMyBlog}>내 블로그</MenuItem>
-                <MenuItem onClick={goManage}>블로그 설정</MenuItem>
-                <MenuItem onClick={goManageCategory}>카테고리 설정</MenuItem>
-                <MenuItem onClick={goManagePost}>글 쓰기</MenuItem>
-                <Divider />
-                <MenuItem onClick={logout}>로그아웃</MenuItem>
+                <MenuItem component={Link} to={"/blog/" + loginId}>내 블로그</MenuItem>
+                  <MenuItem component={Link} to="/manage/post">글 쓰기</MenuItem>
+                  <Divider />
+                  <MenuItem component={Link} to="/manage/profile">프로필 설정</MenuItem>
+                  <MenuItem component={Link} to="/manage">블로그 설정</MenuItem>
+                  <MenuItem component={Link} to="/manage/category">카테고리 설정</MenuItem>
+                  <Divider />
+                  <MenuItem onClick={logout}>로그아웃</MenuItem>
               </Menu>
             </div>
           )}
         </Toolbar>
+      </Container>
       </AppBar>
       <Drawer
         sx={{

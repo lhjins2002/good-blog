@@ -40,4 +40,13 @@
       FROM good_blog.tb_blogs bl
       WHERE bl.user_id = #{owner_id}
   </select>
+  <select id="selectProfileInfo">
+      SELECT 
+        user_name
+        , photo
+        , introduce
+        , back_photo
+      FROM good_blog.tb_users
+      WHERE user_id = #{owner_id}
+  </select>
 </mapper>

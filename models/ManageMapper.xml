@@ -69,13 +69,17 @@
       SELECT 
         user_name
         , photo
+        , introduce
+        , back_photo
       FROM good_blog.tb_users
       WHERE user_id = #{owner_id}
   </select>
   <update id="updateProfile">
       UPDATE good_blog.tb_users
       SET user_name = #{user_name},
-          photo = #{photo}
+          photo = #{photo},
+          introduce = #{introduce},
+          back_photo = #{back_photo}
       WHERE user_id = #{owner_id}
   </update>
 </mapper>

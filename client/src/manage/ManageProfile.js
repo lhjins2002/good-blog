@@ -6,8 +6,11 @@ import { Container } from '@mui/system';
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
-import { Avatar } from '@mui/material';
 import cookie from 'react-cookies';
+import Avatar from '@mui/joy/Avatar';
+import { CssVarsProvider } from '@mui/joy/styles';
+import { Card } from '@mui/material';
+import { CardMedia } from '@mui/material';
 
 class ManageProfile extends React.Component {
     constructor(props) {
@@ -17,6 +20,8 @@ class ManageProfile extends React.Component {
             owner_id: props.owner_id,
             user_name: "",
             photo: "",
+            introduce: '',
+            back_photo: '',
         }
     }
 
@@ -32,6 +37,8 @@ class ManageProfile extends React.Component {
             try {
                 this.setState({ user_name: response.data.json[0].user_name });
                 this.setState({ photo: response.data.json[0].photo });
+                this.setState({ introduce: response.data.json[0].introduce });
+                this.setState({ back_photo: response.data.json[0].back_photo });
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -43,6 +50,8 @@ class ManageProfile extends React.Component {
         axios.post('/manage?type=editProfile', {
             photo : this.state.photo,
             user_name : data.get('userName'),
+            introduce : this.state.introduce,
+            back_photo : this.state.back_photo,
             owner_id : this.state.owner_id,
         })
         .then( response => {
@@ -75,7 +84,7 @@ class ManageProfile extends React.Component {
         }
     };
 
-    handlePostImage = (e) => {
+    handlePostPhoto = (e) => {
 
         const postFile = e.target.files[0];
         
@@ -83,6 +92,19 @@ class ManageProfile extends React.Component {
         formData.append('file', postFile);
         return axios.post("/api/upload?type=uploads/image/", formData).then(res => {
             this.setState({photo : res.data.filename});
+        }).catch(error => {
+            alert('작업중 오류가 발생하였습니다.')            
+        })
+    }
+
+    handlePostBackPhoto = (e) => {
+
+        const postFile = e.target.files[0];
+        
+        const formData = new FormData();
+        formData.append('file', postFile);
+        return axios.post("/api/upload?type=uploads/image/", formData).then(res => {
+            this.setState({back_photo : res.data.filename});
         }).catch(error => {
             alert('작업중 오류가 발생하였습니다.')            
         })
@@ -101,12 +123,25 @@ class ManageProfile extends React.Component {
                         </Button>
                     </div>
                     <div style={{marginTop:16}}>
-                        <Avatar
-                            alt={this.state.user_name}
-                            src={"/image/" + this.state.photo}
-                            sx={{ width: 72, height: 72 }}
-                        />
-                        <input type="file" name="file" onChange={this.handlePostImage}/>	
+                        {this.state.back_photo && <Card sx={{ maxWidth: 345 }}>
+                            <CardMedia
+                                component="img"
+                                alt=""
+                                height="140"
+                                image={"/image/" + this.state.back_photo}
+                            />
+                        </Card>}
+                        <input type="file" name="file" onChange={this.handlePostBackPhoto}/>	
+                    </div>
+                    <div style={{marginTop:16}}>
+                        <CssVarsProvider>
+                            <Avatar
+                                alt={this.state.user_name}
+                                src={"/image/" + this.state.photo}
+                                sx={{ width: 72, height: 72 }}
+                            />
+                        </CssVarsProvider>
+                        <input type="file" name="file" onChange={this.handlePostPhoto}/>	
                     </div>
                     <div style={{marginTop:16}}>
                         <TextField
@@ -120,6 +155,20 @@ class ManageProfile extends React.Component {
                         type="text"
                         id="userName"
                         autoComplete="userName"
+                        />
+                    </div>
+                    <div style={{marginTop:16}}>
+                        <TextField
+                        value={this.state.introduce}
+                        onChange={(event) => this.setState({introduce:event.target.value})}
+                        margin="dense"
+                        required
+                        fullWidth
+                        name="introduce"
+                        label="자기소개"
+                        type="text"
+                        id="introduce"
+                        autoComplete="introduce"
                         />
                     </div>
                 </Box>

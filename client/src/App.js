@@ -10,10 +10,39 @@ import ManagePost from './manage/ManagePost'
 import ManageBlog from './manage/ManageBlog';
 import ManageProfile from './manage/ManageProfile';
 import './App.css'
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { CircularProgress } from '@mui/material';
 
 function App() {
+
+  const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        axios.interceptors.request.use(function (config) {
+            // 로딩 호출
+            setIsLoading(true);
+            return config;
+        }, function (error) {
+            // 실패 시 로딩창 종료
+            setIsLoading(false);
+            return Promise.reject(error);
+        })
+        axios.interceptors.response.use((config) => {
+            // 완료 시 로딩창 종료
+            setIsLoading(false);
+            return config;
+        },(error) => {
+            // 실패 시 로딩창 종료
+            setIsLoading(false);
+            return Promise.reject(error)
+        })
+    }, [])
+
+
   return (
     <div className="App">
+        {isLoading && <CircularProgress sx={{position:'fixed', left:'calc(50% - 20px)', top:'calc(50% - 20px)', zIndex:1000}} />}
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/blog/*' element={<Blog />}>

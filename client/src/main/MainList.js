@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Container } from '@mui/system';
 import axios from 'axios';
 import { withRouter } from '../common/withRouter';
 import Avatar from '@mui/joy/Avatar';
@@ -88,11 +87,9 @@ class MainList extends React.Component {
 
     render () {
         return (
-            <Container>
-                <CssVarsProvider>
-                    {this.state.append_MainList}
-                </CssVarsProvider>
-            </Container>
+            <CssVarsProvider>
+                {this.state.append_MainList}
+            </CssVarsProvider>
         );
     }
 }

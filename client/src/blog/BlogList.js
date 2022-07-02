@@ -4,11 +4,13 @@ import axios from 'axios';
 import { withRouter } from '../common/withRouter';
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
-import Link from '@mui/joy/Link';
 import Card from '@mui/joy/Card';
-import Chip from '@mui/joy/Chip';
 import Typography from '@mui/joy/Typography';
 import { CssVarsProvider } from '@mui/joy/styles';
+import CardOverflow from '@mui/joy/CardOverflow';
+import IconButton from '@mui/joy/IconButton';
+import Favorite from '@mui/icons-material/Favorite';
+import Avatar from '@mui/joy/Avatar';
 
 class BlogList extends React.Component {
     constructor(props) {
@@ -17,11 +19,33 @@ class BlogList extends React.Component {
         this.state = {
             owner_id: props.owner_id,
             append_BlogList: '',
+            user_name: '',
+            photo: '',
+            introduce: '',
+            back_photo: '',
         }
     }
 
     componentDidMount() {
+        this.callProfileInfoApi();
         this.callBlogListApi()
+    }
+
+    callProfileInfoApi = async () => {
+        axios.post('/blog?type=profileinfo', {
+            owner_id : this.state.owner_id,
+        })
+        .then( response => {
+            try {
+                this.setState({ user_name: response.data.json[0].user_name });
+                this.setState({ photo: response.data.json[0].photo });
+                this.setState({ introduce: response.data.json[0].introduce });
+                this.setState({ back_photo: response.data.json[0].back_photo });
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
     callBlogListApi = async () => {
@@ -96,6 +120,53 @@ class BlogList extends React.Component {
         return (
             <Container>
                 <CssVarsProvider>
+                <Card variant="outlined" sx={{ minWidth: 320 }} style={{marginTop:16}}>
+                    <CardOverflow>
+                        <AspectRatio ratio="2">
+                        <img
+                            src={"/image/" + this.state.back_photo} 
+                            alt=""
+                        />
+                        </AspectRatio>
+                        <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} 
+                            sx={{
+                                position: 'absolute',
+                                zIndex: 2,
+                                borderRadius: '50%',
+                                left: '1rem',
+                                bottom: 0,
+                                transform: 'translateY(50%)',
+                                width: 56, height: 56,
+                            }}
+                        />
+                    </CardOverflow>
+                    <Typography level="h2" sx={{ fontSize: 'md', mt: 5 }}>
+                        {this.state.user_name}
+                    </Typography>
+                    <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
+                        {this.state.introduce}
+                    </Typography>
+                    <CardOverflow
+                        variant="soft"
+                        sx={{
+                        display: 'flex',
+                        gap: 1.5,
+                        py: 1.5,
+                        px: 'var(--Card-padding)',
+                        borderTop: '1px solid',
+                        borderColor: 'neutral.outlinedBorder',
+                        bgcolor: 'background.level1',
+                        }}
+                    >
+                        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+                        전체글 123
+                        </Typography>
+                        <Box sx={{ width: 2, bgcolor: 'divider' }} />
+                        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+                        조회수 456
+                        </Typography>
+                    </CardOverflow>
+                    </Card>
                         {this.state.append_BlogList}
                 </CssVarsProvider>
             </Container>
