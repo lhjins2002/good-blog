@@ -36,7 +36,7 @@ class MainList extends React.Component {
     }
 
     handlePostClick = (user_id, post_id) => {
-        this.props.navigate('/blog/' + user_id + '/' + post_id);
+        this.props.navigate('/view/' + user_id + '/' + post_id);
     }
 
     MainListAppend = (response) => {

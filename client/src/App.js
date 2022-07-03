@@ -47,6 +47,9 @@ function App() {
         <Route path='/' element={<Main />} />
         <Route path='/blog/*' element={<Blog />}>
           <Route path=':owner_id' element={<BlogList />} />
+          <Route path=':owner_id/:cate_id' element={<BlogList />} />
+        </Route>
+        <Route path='/view/*' element={<Blog />}>
           <Route path=':owner_id/:post_id' element={<BlogView />} />
         </Route>
         <Route path='/manage/*' element={<Blog />}>

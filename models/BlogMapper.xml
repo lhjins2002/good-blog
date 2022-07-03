@@ -22,6 +22,19 @@
       AND bl.user_id = #{owner_id}
       order by po.create_dt desc
   </select>
+  <select id="selectPostListByCategory">
+      SELECT 
+        post_id
+          , post_name
+        , category_name
+        , post_content
+        , create_dt
+        , thumbnail
+      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po
+      WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
+      AND bl.user_id = #{owner_id} AND ca.category_id = #{cate_id} 
+      order by po.create_dt desc
+  </select>
   <select id="selectPostView">
       SELECT 
         post_name

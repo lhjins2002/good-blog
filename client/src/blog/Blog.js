@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -90,6 +90,7 @@ export default function Blog() {
   //const theme = useTheme();
   let { owner_id } = useParams();
   let { post_id } = useParams();
+  let { cate_id } = useParams();
   const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
 
@@ -120,6 +121,11 @@ export default function Blog() {
   let isManage = false;
   if(location.pathname.startsWith("/manage")){
     isManage = true;
+  }
+
+  let isView = false;
+  if(location.pathname.startsWith("/view")){
+    isView = true;
   }
 
   const handleDrawerOpen = () => {
@@ -176,6 +182,11 @@ export default function Blog() {
           isManage = false;
           if(location.pathname.startsWith("/manage")){
             isManage = true;
+          }
+
+          isView = false;
+          if(location.pathname.startsWith("/view")){
+            isView = true;
           }
 
           var user_id = "";
@@ -320,6 +331,9 @@ export default function Blog() {
         open={open}
       >
         <DrawerHeader>
+          <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#333D51', }}>
+              Good Blog
+            </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
           </IconButton>
@@ -330,10 +344,15 @@ export default function Blog() {
       </Drawer>
       <Main open={open}>
         <DrawerHeader />
-        { !isManage &&
+        { !isManage && isView &&
+          <Routes>
+            <Route path=':owner_id/:post_id' element={<BlogView owner_id={owner_id} post_id={post_id} />} />
+          </Routes>
+        }
+        { !isManage && !isView &&
           <Routes>
             <Route path=':owner_id' element={<BlogList owner_id={owner_id} />} />
-            <Route path=':owner_id/:post_id' element={<BlogView owner_id={owner_id} post_id={post_id} />} />
+            <Route path=':owner_id/:cate_id' element={<BlogList owner_id={owner_id} cate_id={cate_id} />} />
           </Routes>
         }
         { isManage && manageContentArea }

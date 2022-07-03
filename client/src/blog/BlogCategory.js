@@ -2,10 +2,12 @@ import * as React from 'react';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import axios from 'axios';
+import ListSubheader from '@mui/material/ListSubheader';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import FolderIcon from '@mui/icons-material/Folder';
+import { Link } from 'react-router-dom';
 
 class BlogCategory extends React.Component {
     constructor(props) {
@@ -46,10 +48,10 @@ class BlogCategory extends React.Component {
             var category_name = data.category_name;
 
             result.push(
-                <ListItem key={category_id} disablePadding>
+                <ListItem key={category_id} disablePadding component={Link} style={{color:'inherit'}} to={"/blog/" + this.state.owner_id + "/" + category_id}>
                     <ListItemButton>
                         <ListItemIcon>
-                        <InboxIcon />
+                            <FolderIcon />
                         </ListItemIcon>
                         <ListItemText primary={category_name} />
                     </ListItemButton>
@@ -61,7 +63,13 @@ class BlogCategory extends React.Component {
 
     render () {
         return (
-            <List>
+            <List
+                subheader={
+                <ListSubheader component="div" id="nested-list-subheader">
+                  카테고리
+                </ListSubheader>
+              }
+            >
                 {this.state.append_BlogCategory}
             </List>
         );

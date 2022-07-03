@@ -16,6 +16,7 @@ class BlogList extends React.Component {
 
         this.state = {
             owner_id: props.owner_id,
+            cate_id: props.cate_id,
             append_BlogList: '',
             user_name: '',
             photo: '',
@@ -25,8 +26,24 @@ class BlogList extends React.Component {
     }
 
     componentDidMount() {
-        this.callProfileInfoApi();
-        this.callBlogListApi()
+        
+        if(this.state.cate_id != null){
+            this.callBlogListByCategoryApi(this.state.cate_id);
+        }else{
+            this.callProfileInfoApi();
+            this.callBlogListApi();
+        }
+    }
+
+    componentDidUpdate(prevProps){
+        if(this.props.owner_id !== prevProps.owner_id || this.props.cate_id !== prevProps.cate_id){
+            if(this.props.cate_id != null){
+                this.callBlogListByCategoryApi(this.props.cate_id);
+            }else{
+                this.callProfileInfoApi();
+                this.callBlogListApi();
+            }
+        }
     }
 
     callProfileInfoApi = async () => {
@@ -60,8 +77,23 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    callBlogListByCategoryApi = async (cate_id) => {
+        axios.post('/blog?type=listbycategory', {
+            owner_id : this.state.owner_id,
+            cate_id : cate_id,
+        })
+        .then( response => {
+            try {
+                this.setState({ append_BlogList: this.BlogListAppend(response) });
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
     handlePostClick = (post_id) => {
-        this.props.navigate('/blog/' + this.state.owner_id + '/' + post_id);
+        this.props.navigate('/view/' + this.state.owner_id + '/' + post_id);
     }
 
     BlogListAppend = (response) => {
@@ -118,54 +150,56 @@ class BlogList extends React.Component {
         return (
             <Container>
                 <CssVarsProvider>
-                <Card variant="outlined" sx={{ minWidth: 320 }} style={{marginTop:16}}>
-                    <CardOverflow>
-                        <AspectRatio ratio="2">
-                        <img
-                            src={"/image/" + this.state.back_photo} 
-                            alt=""
-                        />
-                        </AspectRatio>
-                        <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} 
+                {!this.state.cate_id &&
+                    <Card variant="outlined" sx={{ minWidth: 320 }} style={{marginTop:16}}>
+                        <CardOverflow>
+                            <AspectRatio ratio="2">
+                            <img
+                                src={"/image/" + this.state.back_photo} 
+                                alt=""
+                            />
+                            </AspectRatio>
+                            <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} 
+                                sx={{
+                                    position: 'absolute',
+                                    zIndex: 2,
+                                    borderRadius: '50%',
+                                    left: '1rem',
+                                    bottom: 0,
+                                    transform: 'translateY(50%)',
+                                    width: 56, height: 56,
+                                }}
+                            />
+                        </CardOverflow>
+                        <Typography level="h2" sx={{ fontSize: 'md', mt: 5 }}>
+                            {this.state.user_name}
+                        </Typography>
+                        <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
+                            {this.state.introduce}
+                        </Typography>
+                        <CardOverflow
+                            variant="soft"
                             sx={{
-                                position: 'absolute',
-                                zIndex: 2,
-                                borderRadius: '50%',
-                                left: '1rem',
-                                bottom: 0,
-                                transform: 'translateY(50%)',
-                                width: 56, height: 56,
+                            display: 'flex',
+                            gap: 1.5,
+                            py: 1.5,
+                            px: 'var(--Card-padding)',
+                            borderTop: '1px solid',
+                            borderColor: 'neutral.outlinedBorder',
+                            bgcolor: 'background.level1',
                             }}
-                        />
-                    </CardOverflow>
-                    <Typography level="h2" sx={{ fontSize: 'md', mt: 5 }}>
-                        {this.state.user_name}
-                    </Typography>
-                    <Typography level="body2" sx={{ mt: 0.5, mb: 2 }}>
-                        {this.state.introduce}
-                    </Typography>
-                    <CardOverflow
-                        variant="soft"
-                        sx={{
-                        display: 'flex',
-                        gap: 1.5,
-                        py: 1.5,
-                        px: 'var(--Card-padding)',
-                        borderTop: '1px solid',
-                        borderColor: 'neutral.outlinedBorder',
-                        bgcolor: 'background.level1',
-                        }}
-                    >
-                        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-                        전체글 123
-                        </Typography>
-                        <Box sx={{ width: 2, bgcolor: 'divider' }} />
-                        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-                        조회수 456
-                        </Typography>
-                    </CardOverflow>
-                    </Card>
-                        {this.state.append_BlogList}
+                        >
+                            <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+                            전체글 123
+                            </Typography>
+                            <Box sx={{ width: 2, bgcolor: 'divider' }} />
+                            <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
+                            조회수 456
+                            </Typography>
+                        </CardOverflow>
+                        </Card>
+                    }   
+                    {this.state.append_BlogList}
                 </CssVarsProvider>
             </Container>
         );

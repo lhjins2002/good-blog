@@ -25,6 +25,10 @@ router.post('/', (req, res, next) => {
         //최신 리스트 조회
         req.body.crud = 'select';//select, insert, update, delete 중에 입력
         req.body.mapper_id = 'selectPostList';
+    }else if(type == 'listbycategory'){
+        //최신 리스트 조회
+        req.body.crud = 'select';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'selectPostListByCategory';
     }else if(type == 'view'){
         //최신 리스트 조회
         req.body.crud = 'select';//select, insert, update, delete 중에 입력

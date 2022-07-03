@@ -1,11 +1,12 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import Box from '@mui/joy/Box';
 import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.bubble.css'
 import Avatar from '@mui/joy/Avatar';
+import { CssVarsProvider } from '@mui/joy/styles';
 
 class BlogView extends React.Component {
     constructor(props) {
@@ -14,13 +15,13 @@ class BlogView extends React.Component {
         this.state = {
             owner_id: props.owner_id,
             post_id: props.post_id,
-            rows: [],
             text: '',
             subject: '',
             thumbnail:'',
             user_name:'',
             photo:'',
             reg_date:'',
+            category_name:'',
         }
 
     }
@@ -43,13 +44,13 @@ class BlogView extends React.Component {
                 var day = date.substr(8,2)
                 var reg_date = year +'.'+month+'.'+day;
 
-                this.setState({ rows: response.data.json,
-                                text: response.data.json[0].post_content,
+                this.setState({ text: response.data.json[0].post_content,
                                 subject: response.data.json[0].post_name,
                                 thumbnail: response.data.json[0].thumbnail,
                                 user_name: response.data.json[0].user_name,
                                 photo: response.data.json[0].photo,
                                 reg_date: reg_date,
+                                category_name: response.data.json[0].category_name,
                 });
                 
             } catch (error) {
@@ -59,33 +60,15 @@ class BlogView extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
-    handleEditorChange = (event) => {
-        this.setState({ text: event })
-    }
-
-    handleCateChange= (event) => {
-        this.setState({ selCategory: event.target.value })
-    }
-
-    handleSubmit = (event) => {
-
-        const data = new FormData(event.currentTarget);
-
-        let valid = true;
-        console.log(valid);
-
-        if(valid){
-            this.callAddPostApi(data);
-        }
-
-    };
-
-
     render () {
         return (
             <Container>
-                <Box sx={{ minWidth: 275 }} style={{marginTop:16}} component="form" noValidate onSubmit={this.handleSubmit}>
-                    <Typography level="h5" component="div">
+                <CssVarsProvider>
+                <Box sx={{ minWidth: 275 }} style={{marginTop:16}}>
+                    <Typography level="body3" component="div">
+                        {this.state.category_name}
+                    </Typography>
+                    <Typography level="h3" component="div">
                         {this.state.subject}
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1.5, marginTop:'16px' }}>
@@ -110,6 +93,7 @@ class BlogView extends React.Component {
                         </ReactQuill>
                     </div>
                 </Box>
+                </CssVarsProvider>
             </Container>
         );
     }
