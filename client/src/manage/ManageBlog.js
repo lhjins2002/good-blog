@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import {TwitterPicker} from 'react-color';
 import reactCSS from 'reactcss'
@@ -114,13 +114,13 @@ class ManageBlog extends React.Component {
           });
 
         return (
-            <Container>
-                <Box sx={{ minWidth: 275 }} style={{marginTop:16}} component="form" noValidate onSubmit={this.handleSubmit}>
-                    <Typography variant="h5" component="div">
+            <Container maxWidth="md">
+                <Box sx={{ minWidth: 275 }} style={{marginTop:30}} component="form" noValidate onSubmit={this.handleSubmit}>
+                    <Typography level="h3" component="div">
                         블로그 설정
                     </Typography>
-                    <div>
-                        <Button variant="outlined" startIcon={<AddIcon />} style={{marginTop:16}} type="submit">
+                    <div style={{marginTop:30}}>
+                        <Button variant="contained" disableElevation startIcon={<SaveIcon />} type="submit">
                             저장
                         </Button>
                     </div>
@@ -139,7 +139,10 @@ class ManageBlog extends React.Component {
                         />
                     </div>
                     <div style={{marginTop:16}}>
-                    <div>
+                    <Typography level="h6" component="div">
+                        블로그 테마
+                    </Typography>
+                    <div style={{marginTop:10}}>
                         <div style={ styles.swatch } onClick={ this.handleClick }>
                         <div style={ styles.color } />
                         </div>

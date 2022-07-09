@@ -9,6 +9,7 @@ import Typography from '@mui/joy/Typography';
 import { CssVarsProvider } from '@mui/joy/styles';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Avatar from '@mui/joy/Avatar';
+import ImageIcon from '@mui/icons-material/Image';
 
 class BlogList extends React.Component {
     constructor(props) {
@@ -148,16 +149,21 @@ class BlogList extends React.Component {
 
     render () {
         return (
-            <Container>
+            <Container maxWidth="md">
                 <CssVarsProvider>
-                {!this.state.cate_id &&
-                    <Card variant="outlined" sx={{ minWidth: 320 }} style={{marginTop:16}}>
+                {!this.props.cate_id &&
+                    <Card variant="outlined" sx={{ minWidth: 320 }} style={{marginTop:30}}>
                         <CardOverflow>
                             <AspectRatio ratio="2">
-                            <img
+                            {this.state.back_photo && <img
                                 src={"/image/" + this.state.back_photo} 
                                 alt=""
                             />
+                            }
+                            {!this.state.back_photo && <div data-first-child>
+                                <ImageIcon sx={{ color: 'text.tertiary', fontSize:64 }} />
+                                </div>
+                            }
                             </AspectRatio>
                             <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} 
                                 sx={{
@@ -198,8 +204,10 @@ class BlogList extends React.Component {
                             </Typography>
                         </CardOverflow>
                         </Card>
-                    }   
+                    }
+                    <div style={{marginTop:30}}> 
                     {this.state.append_BlogList}
+                    </div>  
                 </CssVarsProvider>
             </Container>
         );

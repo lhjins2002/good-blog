@@ -88,6 +88,9 @@ class MainList extends React.Component {
     render () {
         return (
             <CssVarsProvider>
+                <Typography level="h3" component="div" style={{marginTop:30, marginBottom:30}}>
+                        베스트
+                    </Typography>
                 {this.state.append_MainList}
             </CssVarsProvider>
         );

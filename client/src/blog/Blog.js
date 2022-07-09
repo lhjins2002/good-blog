@@ -109,7 +109,7 @@ export default function Blog() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: blogTheme == ''?"#ffffff":blogTheme,
+        main: blogTheme == null ||blogTheme == ''?"#ffffff":blogTheme,
       },
       secondary: {
         main: "#D3AC2B",

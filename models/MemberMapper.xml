@@ -14,10 +14,12 @@
       'Y');
       INSERT INTO good_blog.tb_blogs
       (blog_name,
+      blog_theme,
       user_id,
       use_yn)
       VALUES
       (#{blog_name},
+      '#ffffff',
       #{user_id},
       'Y');
   </insert>

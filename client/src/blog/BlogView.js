@@ -62,16 +62,16 @@ class BlogView extends React.Component {
 
     render () {
         return (
-            <Container>
+            <Container maxWidth="md">
                 <CssVarsProvider>
-                <Box sx={{ minWidth: 275 }} style={{marginTop:16}}>
+                <Box sx={{ minWidth: 275 }} style={{marginTop:30}}>
                     <Typography level="body3" component="div">
                         {this.state.category_name}
                     </Typography>
                     <Typography level="h3" component="div">
                         {this.state.subject}
                     </Typography>
-                    <Box sx={{ display: 'flex', gap: 1.5, marginTop:'16px' }}>
+                    <Box sx={{ display: 'flex', gap: 1.5, marginTop:'30px' }}>
                         <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} />
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                             <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
@@ -80,13 +80,13 @@ class BlogView extends React.Component {
                             <Typography level="body2">{this.state.reg_date}</Typography>
                         </Box>
                     </Box>
-                    {this.state.thumbnail && <div style={{marginTop:16}}>
+                    {this.state.thumbnail && <div style={{marginTop:30}}>
                         <img style={{maxWidth:'100%'}}
                             src={"/image/" + this.state.thumbnail}
                             alt=""
                             />
                     </div>}
-                    <div style={{marginTop:16}}>
+                    <div style={{marginTop:30}}>
                         <ReactQuill theme={"bubble"}
                                     value={this.state.text}
                                     readOnly="true">

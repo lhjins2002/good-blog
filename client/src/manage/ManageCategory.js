@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
 import AddIcon from '@mui/icons-material/Add';
@@ -19,7 +19,6 @@ import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 class ManageCategory extends React.Component {
@@ -93,13 +92,13 @@ class ManageCategory extends React.Component {
 
     render () {
         return (
-            <Container>
-                <Box sx={{ minWidth: 275 }} style={{marginTop:16}}>
-                    <Typography variant="h5" component="div">
+            <Container maxWidth="md">
+                <Box sx={{ minWidth: 275 }} style={{marginTop:30}}>
+                    <Typography level="h3" component="div">
                         카테고리 설정
                     </Typography>
-                    <div>
-                        <Button variant="outlined" startIcon={<AddIcon />} style={{marginTop:16}} onClick={this.handleClickOpen}>
+                    <div style={{marginTop:30}}>
+                        <Button variant="outlined" startIcon={<AddIcon />} onClick={this.handleClickOpen}>
                             추가
                         </Button>
                     </div>
@@ -142,9 +141,6 @@ class ManageCategory extends React.Component {
                     <Box component="form" noValidate onSubmit={this.handleSubmit}>
                         <DialogTitle>카테고리 추가</DialogTitle>
                         <DialogContent>
-                        <DialogContentText style={{marginBottom:10}}>
-                            카테고리 이름과 순번을 입력해 주세요.
-                        </DialogContentText>
                         <TextField
                             autoFocus
                             margin="dense"

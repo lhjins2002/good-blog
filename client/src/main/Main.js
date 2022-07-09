@@ -97,7 +97,7 @@ export default function Main() {
       <AppBar theme={theme}>
         <Container>
           <Toolbar className='mainToolbar'>
-            <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, textDecoration:'none', color:'#fff' }}>
+            <Typography variant="h5" noWrap component={Link} to="/" sx={{ flexGrow: 1, textDecoration:'none', color:'#fff' }}>
               Good Blog
             </Typography>
             {!auth && <Button color="inherit" onClick={goLogin}>로그인</Button>}
@@ -168,7 +168,7 @@ export default function Main() {
           </Toolbar>
         </Container>
       </AppBar>
-      <Container>
+      <Container maxWidth="md">
         <Toolbar />
         <MainList />
       </Container>

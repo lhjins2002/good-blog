@@ -1,10 +1,9 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import AddIcon from '@mui/icons-material/Add';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { TextField } from '@mui/material';
@@ -12,8 +11,17 @@ import { FormControl } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
-import { Card } from '@mui/material';
-import { CardMedia } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import AspectRatio from '@mui/joy/AspectRatio';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import SaveIcon from '@mui/icons-material/Save';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import { withRouter } from '../common/withRouter';
+import ImageIcon from '@mui/icons-material/Image';
 
 class ManagePost extends React.Component {
     constructor(props) {
@@ -25,6 +33,7 @@ class ManagePost extends React.Component {
             text: '',
             selCategory: '',
             thumbnail: '',
+            noCateAlertOpen: false,
         }
 
     }
@@ -39,6 +48,11 @@ class ManagePost extends React.Component {
         })
         .then( response => {
             try {
+
+                if(response.data.json.length == 0){
+                    this.setState({noCateAlertOpen:true});
+                }
+                
                 this.setState({ rows: response.data.json });
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
@@ -57,6 +71,7 @@ class ManagePost extends React.Component {
         .then( response => {
             try {
                 //this.callBlogCategoryApi();
+                this.props.navigate('/blog/' + this.state.owner_id);
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -73,7 +88,7 @@ class ManagePost extends React.Component {
     }
 
     handleSubmit = (event) => {
-
+        event.preventDefault();
         const data = new FormData(event.currentTarget);
 
         let valid = true;
@@ -96,6 +111,10 @@ class ManagePost extends React.Component {
         }).catch(error => {
             alert('작업중 오류가 발생하였습니다.')            
         })
+    }
+
+    handleCateAlert = () =>{
+        this.props.navigate('/manage/category');
     }
 
     // 이미지 처리를 하는 핸들러
@@ -151,15 +170,19 @@ class ManagePost extends React.Component {
 
       quillRef = React.createRef();
 
+      Input = styled('input')({
+        display: 'none',
+      });
+
     render () {
         return (
-            <Container>
-                <Box sx={{ minWidth: 275 }} style={{marginTop:16}} component="form" noValidate onSubmit={this.handleSubmit}>
-                    <Typography variant="h5" component="div">
+            <Container maxWidth="md">
+                <Box sx={{ minWidth: 275 }} style={{marginTop:30}} component="form" noValidate onSubmit={this.handleSubmit}>
+                    <Typography level="h3" component="div">
                         글 쓰기
                     </Typography>
-                    <div>
-                        <Button variant="outlined" startIcon={<AddIcon />} style={{marginTop:16}} type="submit">
+                    <div style={{marginTop:30}}>
+                        <Button variant="contained" disableElevation startIcon={<SaveIcon />} type="submit">
                             저장
                         </Button>
                     </div>
@@ -191,15 +214,24 @@ class ManagePost extends React.Component {
                         />
                     </div>
                     <div style={{marginTop:16}}>
-                        {this.state.thumbnail && <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                component="img"
+                        <AspectRatio style={{width:300, marginBottom:10}}>
+                            {this.state.thumbnail && <img
+                                src={"/image/" + this.state.thumbnail} 
                                 alt=""
-                                height="140"
-                                image={"/image/" + this.state.thumbnail}
                             />
-                        </Card>}
-                        <input type="file" name="file" onChange={this.handlePostImage}/>	
+                            }
+                            {!this.state.thumbnail && <div data-first-child>
+                                <ImageIcon sx={{ color: 'text.tertiary', fontSize:64 }} />
+                                </div>
+                            }
+                        </AspectRatio>
+                        <label htmlFor="contained-button-file">
+                            <this.Input accept="image/*" id="contained-button-file" multiple type="file" onChange={this.handlePostImage} />
+                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
+                                썸네일 이미지
+                            </Button>
+                        </label>
+                        
                     </div>
                     <div style={{marginTop:16}}>
                         <ReactQuill ref={this.quillRef}
@@ -211,9 +243,28 @@ class ManagePost extends React.Component {
                         </ReactQuill>
                     </div>
                 </Box>
+                <Dialog
+                    open={this.state.noCateAlertOpen}
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">
+                    카테고리가 없습니다.
+                    </DialogTitle>
+                    <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        먼저 카테고리를 만들어 주세요.
+                    </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={this.handleCateAlert} autoFocus>
+                        확인
+                    </Button>
+                    </DialogActions>
+                </Dialog>
             </Container>
         );
     }
 }
 
-export default ManagePost;
+export default withRouter(ManagePost);

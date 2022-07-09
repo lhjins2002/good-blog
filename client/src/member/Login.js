@@ -53,12 +53,12 @@ export default function SignIn() {
 
   const validCheck = (data) => {
       if(data.get('id') == ""){
-          setAlertMsg("[아이디]를 입력해 주세요.");
+          setAlertMsg("아이디를 입력해 주세요.");
           setOpen(true);
           return false;
       }
       if(data.get('password') == ""){
-          setAlertMsg("[비밀번호]를 입력해 주세요.");
+          setAlertMsg("비밀번호를 입력해 주세요.");
           setOpen(true);
           return false;
       }
@@ -130,9 +130,10 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Good Blog 로그인
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+          <Grid item xs={12}>
             <TextField
-              margin="normal"
               required
               fullWidth
               id="id"
@@ -141,8 +142,9 @@ export default function SignIn() {
               autoComplete="id"
               autoFocus
             />
+            </Grid>
+            <Grid item xs={12}>
             <TextField
-              margin="normal"
               required
               fullWidth
               name="password"
@@ -151,28 +153,24 @@ export default function SignIn() {
               id="password"
               autoComplete="password"
             />
-            {open && 
+            </Grid>
+            {open && <Grid item xs={12}>
                 <Alert variant="outlined" severity="error">
                     { alertMsg }
                 </Alert>
+                </Grid>
             }
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="아이디 기억하기"
-            />
+            </Grid>
             <Button
               type="submit"
               fullWidth
-              variant="contained"
+              variant="contained" disableElevation
               sx={{ mt: 3, mb: 2 }}
             >
               로그인
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
-                  비밀번호 찾기
-                </Link>
               </Grid>
               <Grid item>
                 <Link href="/signup" variant="body2">

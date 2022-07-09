@@ -1,16 +1,18 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import cookie from 'react-cookies';
 import Avatar from '@mui/joy/Avatar';
 import { CssVarsProvider } from '@mui/joy/styles';
-import { Card } from '@mui/material';
-import { CardMedia } from '@mui/material';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { styled } from '@mui/material/styles';
+import AspectRatio from '@mui/joy/AspectRatio';
+import ImageIcon from '@mui/icons-material/Image';
 
 class ManageProfile extends React.Component {
     constructor(props) {
@@ -110,39 +112,23 @@ class ManageProfile extends React.Component {
         })
     }
 
+    Input = styled('input')({
+        display: 'none',
+      });
+
     render () {
         return (
-            <Container>
-                <Box sx={{ minWidth: 275 }} style={{marginTop:16}} component="form" noValidate onSubmit={this.handleSubmit}>
-                    <Typography variant="h5" component="div">
+            <Container maxWidth="md">
+                <Box sx={{ minWidth: 275 }} style={{marginTop:30}} component="form" noValidate onSubmit={this.handleSubmit}>
+                    <Typography level="h3" component="div">
                         프로필 설정
                     </Typography>
-                    <div>
-                        <Button variant="outlined" startIcon={<AddIcon />} style={{marginTop:16}} type="submit">
+                    <div style={{marginTop:30}}>
+                        <Button variant="contained" disableElevation startIcon={<SaveIcon />} type="submit">
                             저장
                         </Button>
                     </div>
-                    <div style={{marginTop:16}}>
-                        {this.state.back_photo && <Card sx={{ maxWidth: 345 }}>
-                            <CardMedia
-                                component="img"
-                                alt=""
-                                height="140"
-                                image={"/image/" + this.state.back_photo}
-                            />
-                        </Card>}
-                        <input type="file" name="file" onChange={this.handlePostBackPhoto}/>	
-                    </div>
-                    <div style={{marginTop:16}}>
-                        <CssVarsProvider>
-                            <Avatar
-                                alt={this.state.user_name}
-                                src={"/image/" + this.state.photo}
-                                sx={{ width: 72, height: 72 }}
-                            />
-                        </CssVarsProvider>
-                        <input type="file" name="file" onChange={this.handlePostPhoto}/>	
-                    </div>
+                    
                     <div style={{marginTop:16}}>
                         <TextField
                         value={this.state.user_name}
@@ -156,8 +142,6 @@ class ManageProfile extends React.Component {
                         id="userName"
                         autoComplete="userName"
                         />
-                    </div>
-                    <div style={{marginTop:16}}>
                         <TextField
                         value={this.state.introduce}
                         onChange={(event) => this.setState({introduce:event.target.value})}
@@ -170,6 +154,44 @@ class ManageProfile extends React.Component {
                         id="introduce"
                         autoComplete="introduce"
                         />
+                    </div>
+                    <div style={{marginTop:16}}>
+                        <AspectRatio style={{width:300, marginBottom:10}}>
+                            {this.state.back_photo && <img
+                                src={"/image/" + this.state.back_photo} 
+                                alt=""
+                            />
+                            }
+                            {!this.state.back_photo && <div data-first-child>
+                                <ImageIcon sx={{ color: 'text.tertiary', fontSize:64 }} />
+                                </div>
+                            }
+                        </AspectRatio>
+                        <label htmlFor="contained-button-file">
+                            <this.Input accept="image/*" id="contained-button-file" multiple type="file" onChange={this.handlePostBackPhoto} />
+                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
+                                배경 이미지
+                            </Button>
+                        </label>
+                        
+                        
+                            
+                    </div>
+                    <div style={{marginTop:16}}>
+                        <CssVarsProvider>
+                            <Avatar style={{ marginBottom:10}}
+                                alt={this.state.user_name}
+                                src={"/image/" + this.state.photo}
+                                sx={{ width: 72, height: 72 }}
+                            />
+                        </CssVarsProvider>
+                        <label htmlFor="contained-button-file2">
+                            <this.Input accept="image/*" id="contained-button-file2" multiple type="file" onChange={this.handlePostPhoto} />
+                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
+                                프로필 이미지
+                            </Button>
+                        </label>
+                        
                     </div>
                 </Box>
             </Container>

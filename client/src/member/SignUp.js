@@ -168,7 +168,7 @@ export default function SignUp() {
                 <Button
                 type="submit"
                 fullWidth
-                variant="contained"
+                variant="contained" disableElevation
                 sx={{ mt: 3, mb: 2 }}
                 >
                 회원 가입
