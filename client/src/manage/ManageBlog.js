@@ -7,6 +7,8 @@ import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import {TwitterPicker} from 'react-color';
 import reactCSS from 'reactcss'
+import { createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 
 class ManageBlog extends React.Component {
     constructor(props) {
@@ -80,6 +82,17 @@ class ManageBlog extends React.Component {
         this.setState({ blog_theme: color.hex })
       };
 
+      theme = createTheme({
+        palette: {
+          primary: {
+            main: "#183F48",
+          },
+          secondary: {
+            main: "#D3AC2B",
+          },
+        },
+      });
+
     render () {
 
         const styles = reactCSS({
@@ -119,11 +132,12 @@ class ManageBlog extends React.Component {
                         블로그 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation type="submit">
+                        <Button variant="contained" disableElevation type="submit" theme={this.theme} size='large'>
                             저장
                         </Button>
                     </div>
                     <div style={{marginTop:16}}>
+                    <ThemeProvider theme={this.theme}>
                         <TextField
                         value={this.state.blog_name}
                         onChange={(event) => this.setState({blog_name:event.target.value})}
@@ -136,6 +150,7 @@ class ManageBlog extends React.Component {
                         id="blogName"
                         autoComplete="blogName"
                         />
+                    </ThemeProvider>
                     </div>
                     <div style={{marginTop:16}}>
                     <Typography level="h6" component="div">

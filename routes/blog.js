@@ -39,6 +39,9 @@ router.post('/', (req, res, next) => {
     }else if(type == "profileinfo"){
         req.body.crud = 'select';//select, insert, update, delete 중에 입력
         req.body.mapper_id = 'selectProfileInfo';
+    }else if(type == "categoryName"){
+        req.body.crud = 'select';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'selectCategoryName';
     }
 
     router.use('/', dbconnect_Module);

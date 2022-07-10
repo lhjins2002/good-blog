@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import SaveIcon from '@mui/icons-material/Save';
+import { createTheme } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import cookie from 'react-cookies';
 import Avatar from '@mui/joy/Avatar';
@@ -13,6 +13,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import ImageIcon from '@mui/icons-material/Image';
+import { ThemeProvider } from '@mui/material/styles';
 
 class ManageProfile extends React.Component {
     constructor(props) {
@@ -116,6 +117,17 @@ class ManageProfile extends React.Component {
         display: 'none',
       });
 
+      theme = createTheme({
+        palette: {
+          primary: {
+            main: "#183F48",
+          },
+          secondary: {
+            main: "#D3AC2B",
+          },
+        },
+      });
+
     render () {
         return (
             <Container maxWidth="md">
@@ -124,12 +136,13 @@ class ManageProfile extends React.Component {
                         프로필 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation type="submit">
+                        <Button variant="contained" disableElevation type="submit" theme={this.theme} size='large'>
                             저장
                         </Button>
                     </div>
                     
                     <div style={{marginTop:16}}>
+                    <ThemeProvider theme={this.theme}>
                         <TextField
                         value={this.state.user_name}
                         onChange={(event) => this.setState({user_name:event.target.value})}
@@ -154,6 +167,7 @@ class ManageProfile extends React.Component {
                         id="introduce"
                         autoComplete="introduce"
                         />
+                    </ThemeProvider>
                     </div>
                     <div style={{marginTop:16}}>
                         <Typography level="h6" component="div">
@@ -172,13 +186,10 @@ class ManageProfile extends React.Component {
                         </AspectRatio>
                         <label htmlFor="contained-button-file">
                             <this.Input accept="image/*" id="contained-button-file" multiple type="file" onChange={this.handlePostBackPhoto} />
-                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
+                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />} theme={this.theme}>
                                 업로드
                             </Button>
                         </label>
-                        
-                        
-                            
                     </div>
                     <div style={{marginTop:16}}>
                         <Typography level="h6" component="div">
@@ -193,7 +204,7 @@ class ManageProfile extends React.Component {
                         </CssVarsProvider>
                         <label htmlFor="contained-button-file2">
                             <this.Input accept="image/*" id="contained-button-file2" multiple type="file" onChange={this.handlePostPhoto} />
-                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
+                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />} theme={this.theme}>
                                 업로드
                             </Button>
                         </label>

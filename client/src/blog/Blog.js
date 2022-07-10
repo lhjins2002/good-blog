@@ -86,7 +86,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
-export default function Blog() {
+ const Blog = (props) => {
   //const theme = useTheme();
   let { owner_id } = useParams();
   let { post_id } = useParams();
@@ -171,6 +171,8 @@ export default function Blog() {
   }
 
   React.useEffect(() => {
+    setOpen(false);
+    setAnchorEl(null);
     // 컴포넌트 마운팅된 후 실행
     axios.post('/member?type=SessionConfirm', {
         token1 : cookie.load("userid"),
@@ -230,12 +232,12 @@ export default function Blog() {
         }
     })
     .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
-  }, [location]);
+  }, [location, owner_id]);
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} theme={theme} elevation={0} style={{borderBottom:'1px solid #E7EBF0'}}>
+      <AppBar position="fixed" open={open} theme={theme} elevation={0} style={{borderBottom:'1px solid rgba(0, 0, 0, 0.12)'}}>
       <Container>
         <Toolbar className='mainToolbar'>
           <IconButton
@@ -331,7 +333,7 @@ export default function Blog() {
         open={open}
       >
         <DrawerHeader>
-          <Typography level="h5" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#6667a6', }}>
+          <Typography level="h5" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#183F48', }}>
               Good Blog
             </Typography>
           <IconButton onClick={handleDrawerClose}>
@@ -360,3 +362,4 @@ export default function Blog() {
     </Box>
   );
 }
+export default Blog;

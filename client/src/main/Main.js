@@ -171,8 +171,8 @@ export default function Main() {
       <Toolbar />
       <div style={{borderBottom:'1px solid #E7EBF0', height:150}}>
       <Container maxWidth="md" style={{paddingTop:25}}>
-        <Typography level="h3">
-              새로운 블로그 서비스
+        <Typography level="h4">
+              새로운 블로그 서비스 Good Blog입니다.
         </Typography>
         <Button variant="contained" disableElevation style={{marginTop:16, }} size="large" theme={theme} component={Link} to="/manage/post">
             시작하기

@@ -3,11 +3,16 @@
 <mapper namespace="BlogMapper">  
   <select id="selectCategoryList">
       SELECT 
-        category_id
-        , category_name
-      FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl
-      WHERE ca.blog_id = bl.blog_id
-      AND bl.user_id = #{owner_id}
+        ca.category_id
+        , ca.category_name
+        , ca.category_order
+        , count(po.post_id) AS cnt
+      FROM good_blog.tb_categorys ca
+      LEFT JOIN good_blog.tb_blogs bl ON ca.blog_id = bl.blog_id
+      LEFT JOIN good_blog.tb_posts po ON ca.category_id = po.category_id
+      WHERE bl.user_id = #{owner_id}
+      GROUP BY ca.category_id, ca.category_name, ca.category_order
+      ORDER BY ca.category_order
   </select>
   <select id="selectPostList">
       SELECT 
@@ -63,5 +68,14 @@
         , back_photo
       FROM good_blog.tb_users
       WHERE user_id = #{owner_id}
+  </select>
+  <select id="selectCategoryName">
+      SELECT 
+        ca.category_name
+        , count(po.post_id) AS cnt
+      FROM good_blog.tb_categorys ca
+      LEFT JOIN good_blog.tb_posts po ON ca.category_id = po.category_id
+      WHERE ca.category_id = #{cate_id}
+      GROUP BY ca.category_id, ca.category_name 
   </select>
 </mapper>

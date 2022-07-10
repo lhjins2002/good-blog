@@ -9,6 +9,7 @@
       FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl
       WHERE ca.blog_id = bl.blog_id
       AND bl.user_id = #{owner_id}
+      ORDER BY category_order
   </select>
   <select id="selectPostList">
       SELECT 
@@ -82,4 +83,7 @@
           back_photo = #{back_photo}
       WHERE user_id = #{owner_id}
   </update>
+  <delete id="deleteCategory">
+    DELETE FROM good_blog.tb_categorys WHERE category_id = #{cate_id}
+  </delete>
 </mapper>

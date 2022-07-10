@@ -14,7 +14,7 @@ import { MenuItem } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import AspectRatio from '@mui/joy/AspectRatio';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import SaveIcon from '@mui/icons-material/Save';
+import { createTheme } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -22,6 +22,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { withRouter } from '../common/withRouter';
 import ImageIcon from '@mui/icons-material/Image';
+import { ThemeProvider } from '@mui/material/styles';
 
 class ManagePost extends React.Component {
     constructor(props) {
@@ -174,6 +175,17 @@ class ManagePost extends React.Component {
         display: 'none',
       });
 
+      theme = createTheme({
+        palette: {
+          primary: {
+            main: "#183F48",
+          },
+          secondary: {
+            main: "#D3AC2B",
+          },
+        },
+      });
+
     render () {
         return (
             <Container maxWidth="md">
@@ -182,11 +194,12 @@ class ManagePost extends React.Component {
                         글 쓰기
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation type="submit">
+                        <Button variant="contained" disableElevation type="submit" theme={this.theme} size='large'>
                             저장
                         </Button>
                     </div>
                     <div style={{marginTop:16}}>
+                    <ThemeProvider theme={this.theme}>
                     <FormControl fullWidth required>
                     <InputLabel id="demo-simple-select-label">카테고리명</InputLabel>
                         <Select
@@ -212,6 +225,7 @@ class ManagePost extends React.Component {
                         id="subject"
                         autoComplete="subject"
                         />
+                    </ThemeProvider>
                     </div>
                     <div style={{marginTop:16}}>
                         <Typography level="h6" component="div">
@@ -230,7 +244,7 @@ class ManagePost extends React.Component {
                         </AspectRatio>
                         <label htmlFor="contained-button-file">
                             <this.Input accept="image/*" id="contained-button-file" multiple type="file" onChange={this.handlePostImage} />
-                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
+                            <Button variant="outlined" component="span" startIcon={<PhotoCamera />} theme={this.theme}>
                                 업로드
                             </Button>
                         </label>

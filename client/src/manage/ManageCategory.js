@@ -20,6 +20,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import { createTheme } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 
 class ManageCategory extends React.Component {
     constructor(props) {
@@ -69,6 +71,20 @@ class ManageCategory extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    callDeleteCategoryApi = async (cate_id) => {
+        axios.post('/manage?type=deleteCategory', {
+            cate_id : cate_id,
+        })
+        .then( response => {
+            try {
+                this.callBlogCategoryApi();
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
     handleClickOpen = () => {
         this.setState({modalOpen : true});
     };
@@ -90,6 +106,21 @@ class ManageCategory extends React.Component {
         this.setState({modalOpen : false});
     };
 
+    handleDelete = (cate_id) => {
+        this.callDeleteCategoryApi(cate_id);
+    }
+
+    theme = createTheme({
+        palette: {
+          primary: {
+            main: "#183F48",
+          },
+          secondary: {
+            main: "#D3AC2B",
+          },
+        },
+      });
+
     render () {
         return (
             <Container maxWidth="md">
@@ -98,7 +129,7 @@ class ManageCategory extends React.Component {
                         카테고리 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="outlined" startIcon={<AddIcon />} onClick={this.handleClickOpen}>
+                        <Button variant="outlined" startIcon={<AddIcon />} onClick={this.handleClickOpen} theme={this.theme}>
                             추가
                         </Button>
                     </div>
@@ -128,7 +159,7 @@ class ManageCategory extends React.Component {
                                         <IconButton aria-label="edit">
                                             <EditIcon />
                                         </IconButton>
-                                        <IconButton aria-label="delete">
+                                        <IconButton aria-label="delete" onClick={this.handleDelete.bind(this, row.category_id)}>
                                             <DeleteIcon />
                                         </IconButton>
                                     </TableCell>
@@ -138,6 +169,7 @@ class ManageCategory extends React.Component {
                         </Table>
                     </TableContainer>
                     <Dialog open={this.state.modalOpen} onClose={this.handleClose}>
+                    <ThemeProvider theme={this.theme}>
                     <Box component="form" noValidate onSubmit={this.handleSubmit}>
                         <DialogTitle>카테고리 추가</DialogTitle>
                         <DialogContent>
@@ -166,6 +198,7 @@ class ManageCategory extends React.Component {
                         <Button type="submit">확인</Button>
                         </DialogActions>
                         </Box>
+                    </ThemeProvider>
                     </Dialog>
                 </Box>
             </Container>

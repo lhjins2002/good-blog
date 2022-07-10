@@ -61,6 +61,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<SignUp />} />
       </Routes>
+      <div style={{height:100}}></div>
     </div>
   );
 }

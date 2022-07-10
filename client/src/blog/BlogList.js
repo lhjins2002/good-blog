@@ -23,6 +23,7 @@ class BlogList extends React.Component {
             photo: '',
             introduce: '',
             back_photo: '',
+            cate_name:'',
         }
     }
 
@@ -30,6 +31,7 @@ class BlogList extends React.Component {
         
         if(this.state.cate_id != null){
             this.callBlogListByCategoryApi(this.state.cate_id);
+            this.callCategoryNameApi(this.state.cate_id);
         }else{
             this.callProfileInfoApi();
             this.callBlogListApi();
@@ -40,6 +42,7 @@ class BlogList extends React.Component {
         if(this.props.owner_id !== prevProps.owner_id || this.props.cate_id !== prevProps.cate_id){
             if(this.props.cate_id != null){
                 this.callBlogListByCategoryApi(this.props.cate_id);
+                this.callCategoryNameApi(this.props.cate_id);
             }else{
                 this.callProfileInfoApi();
                 this.callBlogListApi();
@@ -86,6 +89,23 @@ class BlogList extends React.Component {
         .then( response => {
             try {
                 this.setState({ append_BlogList: this.BlogListAppend(response) });
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
+    callCategoryNameApi = async (cate_id) => {
+        axios.post('/blog?type=categoryName', {
+            cate_id : cate_id,
+        })
+        .then( response => {
+            try {
+                let categoryName = response.data.json[0].category_name;
+                let cnt = response.data.json[0].cnt;
+                let cateDisplay = categoryName + '(' + cnt + ')';
+                this.setState({ cate_name: cateDisplay });
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -204,6 +224,13 @@ class BlogList extends React.Component {
                             </Typography>
                         </CardOverflow>
                         </Card>
+                    }
+                    {this.props.cate_id &&
+                        <div style={{marginTop:30}}>
+                            <Typography level="h4" component="div">
+                                {this.state.cate_name}
+                            </Typography>
+                        </div>
                     }
                     <div style={{marginTop:30}}> 
                     {this.state.append_BlogList}

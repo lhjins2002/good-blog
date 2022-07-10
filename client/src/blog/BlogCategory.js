@@ -23,6 +23,13 @@ class BlogCategory extends React.Component {
         this.callBlogCategoryApi()
     }
 
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.owner_id !== prevProps.owner_id || this.state.owner_id !== prevState.owner_id){
+            this.setState({ owner_id:this.props.owner_id});
+            this.callBlogCategoryApi();
+        }
+    }
+
     callBlogCategoryApi = async () => {
         axios.post('/blog?type=category', {
             owner_id : this.state.owner_id,
@@ -46,6 +53,7 @@ class BlogCategory extends React.Component {
 
             var category_id = data.category_id;
             var category_name = data.category_name;
+            var cnt = data.cnt;
 
             result.push(
                 <ListItem key={category_id} disablePadding component={Link} style={{color:'inherit'}} to={"/blog/" + this.state.owner_id + "/" + category_id}>
@@ -53,7 +61,7 @@ class BlogCategory extends React.Component {
                         <ListItemIcon>
                             <FolderIcon />
                         </ListItemIcon>
-                        <ListItemText primary={category_name} />
+                        <ListItemText primary={category_name + '(' + cnt + ')'} />
                     </ListItemButton>
                 </ListItem>
             )
