@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MainList from './MainList';
@@ -31,7 +31,7 @@ export default function Main() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#333D51",
+        main: "#183F48",
       },
       secondary: {
         main: "#D3AC2B",
@@ -92,12 +92,12 @@ export default function Main() {
   }, []);
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box>
       <CssBaseline />
-      <AppBar theme={theme}>
+      <AppBar theme={theme} elevation={0}>
         <Container>
           <Toolbar className='mainToolbar'>
-            <Typography variant="h5" noWrap component={Link} to="/" sx={{ flexGrow: 1, textDecoration:'none', color:'#fff' }}>
+            <Typography level="h4" noWrap component={Link} to="/" sx={{ flexGrow: 1, textDecoration:'none', color:'#fff' }}>
               Good Blog
             </Typography>
             {!auth && <Button color="inherit" onClick={goLogin}>로그인</Button>}
@@ -168,8 +168,18 @@ export default function Main() {
           </Toolbar>
         </Container>
       </AppBar>
+      <Toolbar />
+      <div style={{borderBottom:'1px solid #E7EBF0', height:150}}>
+      <Container maxWidth="md" style={{paddingTop:25}}>
+        <Typography level="h3">
+              새로운 블로그 서비스
+        </Typography>
+        <Button variant="contained" disableElevation style={{marginTop:16, }} size="large" theme={theme} component={Link} to="/manage/post">
+            시작하기
+        </Button>
+        </Container>
+      </div>
       <Container maxWidth="md">
-        <Toolbar />
         <MainList />
       </Container>
     </Box>

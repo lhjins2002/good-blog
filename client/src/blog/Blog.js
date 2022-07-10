@@ -5,7 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import Typography from '@mui/joy/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -235,7 +235,7 @@ export default function Blog() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} theme={theme}>
+      <AppBar position="fixed" open={open} theme={theme} elevation={0} style={{borderBottom:'1px solid #E7EBF0'}}>
       <Container>
         <Toolbar className='mainToolbar'>
           <IconButton
@@ -247,7 +247,7 @@ export default function Blog() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography level="h5" noWrap component="div" sx={{ flexGrow: 1 }}>
             {blogName}
           </Typography>
           {!auth && <Button color="inherit" onClick={goLogin}>로그인</Button>}
@@ -331,7 +331,7 @@ export default function Blog() {
         open={open}
       >
         <DrawerHeader>
-          <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#333D51', }}>
+          <Typography level="h5" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#6667a6', }}>
               Good Blog
             </Typography>
           <IconButton onClick={handleDrawerClose}>

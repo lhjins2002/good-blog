@@ -182,7 +182,7 @@ class ManagePost extends React.Component {
                         글 쓰기
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation startIcon={<SaveIcon />} type="submit">
+                        <Button variant="contained" disableElevation type="submit">
                             저장
                         </Button>
                     </div>
@@ -214,7 +214,10 @@ class ManagePost extends React.Component {
                         />
                     </div>
                     <div style={{marginTop:16}}>
-                        <AspectRatio style={{width:300, marginBottom:10}}>
+                        <Typography level="h6" component="div">
+                            썸네일 이미지
+                        </Typography>
+                        <AspectRatio style={{width:300, marginBottom:10, marginTop:10}}>
                             {this.state.thumbnail && <img
                                 src={"/image/" + this.state.thumbnail} 
                                 alt=""
@@ -228,7 +231,7 @@ class ManagePost extends React.Component {
                         <label htmlFor="contained-button-file">
                             <this.Input accept="image/*" id="contained-button-file" multiple type="file" onChange={this.handlePostImage} />
                             <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
-                                썸네일 이미지
+                                업로드
                             </Button>
                         </label>
                         

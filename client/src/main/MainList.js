@@ -7,6 +7,7 @@ import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import Typography from '@mui/joy/Typography';
 import { CssVarsProvider } from '@mui/joy/styles';
+import Button from '@mui/joy/Button';
 
 
 class MainList extends React.Component {
@@ -88,10 +89,9 @@ class MainList extends React.Component {
     render () {
         return (
             <CssVarsProvider>
-                <Typography level="h3" component="div" style={{marginTop:30, marginBottom:30}}>
-                        베스트
-                    </Typography>
-                {this.state.append_MainList}
+                <div style={{marginTop:30}}>
+                    {this.state.append_MainList}
+                </div>
             </CssVarsProvider>
         );
     }

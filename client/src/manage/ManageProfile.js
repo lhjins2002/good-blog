@@ -124,7 +124,7 @@ class ManageProfile extends React.Component {
                         프로필 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation startIcon={<SaveIcon />} type="submit">
+                        <Button variant="contained" disableElevation type="submit">
                             저장
                         </Button>
                     </div>
@@ -156,7 +156,10 @@ class ManageProfile extends React.Component {
                         />
                     </div>
                     <div style={{marginTop:16}}>
-                        <AspectRatio style={{width:300, marginBottom:10}}>
+                        <Typography level="h6" component="div">
+                            배경 이미지
+                        </Typography>
+                        <AspectRatio style={{width:300, marginBottom:10, marginTop:10}}>
                             {this.state.back_photo && <img
                                 src={"/image/" + this.state.back_photo} 
                                 alt=""
@@ -170,7 +173,7 @@ class ManageProfile extends React.Component {
                         <label htmlFor="contained-button-file">
                             <this.Input accept="image/*" id="contained-button-file" multiple type="file" onChange={this.handlePostBackPhoto} />
                             <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
-                                배경 이미지
+                                업로드
                             </Button>
                         </label>
                         
@@ -178,8 +181,11 @@ class ManageProfile extends React.Component {
                             
                     </div>
                     <div style={{marginTop:16}}>
+                        <Typography level="h6" component="div">
+                            프로필 이미지
+                        </Typography>
                         <CssVarsProvider>
-                            <Avatar style={{ marginBottom:10}}
+                            <Avatar style={{ marginBottom:10, marginTop:10}}
                                 alt={this.state.user_name}
                                 src={"/image/" + this.state.photo}
                                 sx={{ width: 72, height: 72 }}
@@ -188,7 +194,7 @@ class ManageProfile extends React.Component {
                         <label htmlFor="contained-button-file2">
                             <this.Input accept="image/*" id="contained-button-file2" multiple type="file" onChange={this.handlePostPhoto} />
                             <Button variant="outlined" component="span" startIcon={<PhotoCamera />}>
-                                프로필 이미지
+                                업로드
                             </Button>
                         </label>
                         

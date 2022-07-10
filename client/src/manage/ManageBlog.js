@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/joy/Typography';
 import { Container } from '@mui/system';
 import axios from 'axios';
-import SaveIcon from '@mui/icons-material/Save';
 import TextField from '@mui/material/TextField';
 import {TwitterPicker} from 'react-color';
 import reactCSS from 'reactcss'
@@ -120,7 +119,7 @@ class ManageBlog extends React.Component {
                         블로그 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation startIcon={<SaveIcon />} type="submit">
+                        <Button variant="contained" disableElevation type="submit">
                             저장
                         </Button>
                     </div>
