@@ -7,15 +7,18 @@ import Box from '@mui/joy/Box';
 import Card from '@mui/joy/Card';
 import Typography from '@mui/joy/Typography';
 import { CssVarsProvider } from '@mui/joy/styles';
-import Button from '@mui/joy/Button';
-
+import Button from '@mui/material/Button';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Fragment } from 'react';
 
 class MainList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            append_MainList: '',
+            append_MainList: [],
+            limit:0,
+            showMore:false,
         }
     }
 
@@ -25,10 +28,11 @@ class MainList extends React.Component {
 
     callMainListApi = async () => {
         axios.post('/main?type=poplist', {
+            limit:this.state.limit
         })
         .then( response => {
             try {
-                this.setState({ append_MainList: this.MainListAppend(response) });
+                this.MainListAppend(response);
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -44,6 +48,13 @@ class MainList extends React.Component {
         let result = []
         var mainList = response.data;
         const extractTextPattern = /(<([^>]+)>)/gi;
+
+        if(mainList.json.length < 10){
+            this.setState({ showMore:false });
+        }else{
+            let newLimit = this.state.limit + 10;
+            this.setState({ showMore:true, limit:newLimit});
+        }
         
         for(let i=0; i<mainList.json.length; i++){
             var data = mainList.json[i]
@@ -83,16 +94,29 @@ class MainList extends React.Component {
                 </Card>
             )
         }
-        return result
+        
+        this.setState({append_MainList : this.state.append_MainList.concat(result)});
     }
 
     render () {
         return (
-            <CssVarsProvider>
-                <div style={{marginTop:30}}>
-                    {this.state.append_MainList}
-                </div>
-            </CssVarsProvider>
+            <Fragment>
+                <CssVarsProvider>
+                    <div style={{marginTop:30}}>
+                        {this.state.append_MainList}
+                    </div>
+                </CssVarsProvider>
+                    {this.state.showMore && <div style={{marginTop:30}}> 
+                        <Button variant="outlined" component="span" startIcon={<ExpandMoreIcon />} theme={this.theme}
+                        fullWidth
+                        size='large'
+                        onClick={this.callMainListApi}
+                        >
+                            더보기
+                        </Button>
+                    </div>}
+            </Fragment>
+            
         );
     }
 }

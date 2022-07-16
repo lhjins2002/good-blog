@@ -72,12 +72,14 @@ class ManagePost extends React.Component {
                     thumbnail: '',
                     selCategory: '',
                 });
+            }else{
+                this.callBlogViewApi();
             }
         }
     }
 
     callBlogCategoryApi = async () => {
-        axios.post('/manage?type=category', {
+        await axios.post('/manage?type=category', {
             owner_id : this.state.owner_id,
         })
         .then( response => {
@@ -98,7 +100,7 @@ class ManagePost extends React.Component {
     callBlogViewApi = async () => {
         axios.post('/blog?type=view', {
             owner_id : this.state.owner_id,
-            post_id : this.state.post_id
+            post_id : this.props.post_id
         })
         .then( response => {
             try {

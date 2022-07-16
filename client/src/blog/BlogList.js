@@ -10,6 +10,9 @@ import { CssVarsProvider } from '@mui/joy/styles';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Avatar from '@mui/joy/Avatar';
 import ImageIcon from '@mui/icons-material/Image';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from '@mui/material/Button';
+import { createTheme } from '@mui/material';
 
 class BlogList extends React.Component {
     constructor(props) {
@@ -18,12 +21,14 @@ class BlogList extends React.Component {
         this.state = {
             owner_id: props.owner_id,
             cate_id: props.cate_id,
-            append_BlogList: '',
+            append_BlogList: [],
             user_name: '',
             photo: '',
             introduce: '',
             back_photo: '',
             cate_name:'',
+            limit:0,
+            showMore:false,
         }
     }
 
@@ -40,13 +45,13 @@ class BlogList extends React.Component {
 
     componentDidUpdate(prevProps, prevState){
         if(this.props.owner_id !== prevProps.owner_id || this.props.cate_id !== prevProps.cate_id || this.state.owner_id !== prevState.owner_id){
-            this.setState({ owner_id:this.props.owner_id});
+            this.setState({ owner_id:this.props.owner_id, limit:0, append_BlogList: []});
             if(this.props.cate_id != null){
-                this.callBlogListByCategoryApi(this.props.cate_id);
+                this.callBlogListByCategoryApi(this.props.cate_id, 0);
                 this.callCategoryNameApi(this.props.cate_id);
             }else{
                 this.callProfileInfoApi();
-                this.callBlogListApi();
+                this.callBlogListApi(0);
             }
         }
     }
@@ -68,13 +73,19 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
-    callBlogListApi = async () => {
+    callBlogListApi = async (limit) => {
+
+        if(limit != 0){
+            limit = this.state.limit;
+        }
+
         axios.post('/blog?type=list', {
             owner_id : this.state.owner_id,
+            limit : limit
         })
         .then( response => {
             try {
-                this.setState({ append_BlogList: this.BlogListAppend(response) });
+                this.BlogListAppend(response);
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -82,14 +93,20 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
-    callBlogListByCategoryApi = async (cate_id) => {
+    callBlogListByCategoryApi = async (cate_id, limit) => {
+
+        if(limit != 0){
+            limit = this.state.limit;
+        }
+
         axios.post('/blog?type=listbycategory', {
             owner_id : this.state.owner_id,
             cate_id : cate_id,
+            limit : limit
         })
         .then( response => {
             try {
-                this.setState({ append_BlogList: this.BlogListAppend(response) });
+                this.BlogListAppend(response);
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -122,6 +139,13 @@ class BlogList extends React.Component {
         let result = []
         var blogList = response.data;
         const extractTextPattern = /(<([^>]+)>)/gi;
+
+        if(blogList.json.length < 10){
+            this.setState({ showMore:false });
+        }else{
+            let newLimit = this.state.limit + 10;
+            this.setState({ showMore:true, limit:newLimit});
+        }
         
         for(let i=0; i<blogList.json.length; i++){
             var data = blogList.json[i];
@@ -165,8 +189,21 @@ class BlogList extends React.Component {
                     </Card>
             )
         }
-        return result
+
+        this.setState({append_BlogList : this.state.append_BlogList.concat(result)});
+
     }
+
+    theme = createTheme({
+        palette: {
+          primary: {
+            main: "#183F48",
+          },
+          secondary: {
+            main: "#D3AC2B",
+          },
+        },
+      });
 
     render () {
         return (
@@ -236,7 +273,17 @@ class BlogList extends React.Component {
                     <div style={{marginTop:30}}> 
                     {this.state.append_BlogList}
                     </div>  
+                    
                 </CssVarsProvider>
+                {this.state.showMore && <div style={{marginTop:30}}> 
+                    <Button variant="outlined" component="span" startIcon={<ExpandMoreIcon />} theme={this.theme}
+                    fullWidth
+                    size='large'
+                    onClick={this.callBlogListApi}
+                    >
+                        더보기
+                    </Button>
+                </div>}
             </Container>
         );
     }

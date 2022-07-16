@@ -26,6 +26,7 @@
       WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
       AND bl.user_id = #{owner_id}
       order by po.create_dt desc
+      limit ${limit}, 10
   </select>
   <select id="selectPostListByCategory">
       SELECT 
@@ -39,6 +40,7 @@
       WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id
       AND bl.user_id = #{owner_id} AND ca.category_id = #{cate_id} 
       order by po.create_dt desc
+      limit ${limit}, 10
   </select>
   <select id="selectPostView">
       SELECT 

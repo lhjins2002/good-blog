@@ -220,9 +220,10 @@ class ManageCategory extends React.Component {
                     <Dialog open={this.state.modalOpen} onClose={this.handleClose}>
                     <ThemeProvider theme={this.theme}>
                     <Box component="form" noValidate onSubmit={this.handleSubmit}>
-                        <DialogTitle>카테고리 추가</DialogTitle>
+                        <DialogTitle>카테고리 {this.state.mode == 'add' && '추가'}{this.state.mode == 'modify' && '수정'}</DialogTitle>
                         <DialogContent>
                         <TextField
+                            required
                             autoFocus
                             margin="dense"
                             id="name"
@@ -235,6 +236,7 @@ class ManageCategory extends React.Component {
                             onChange={this.handleCateNameChange}
                         />
                         <TextField
+                            required
                             margin="dense"
                             id="order"
                             name="order"
