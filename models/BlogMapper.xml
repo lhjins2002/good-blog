@@ -44,6 +44,7 @@
       SELECT 
         post_name
         , category_name
+        , ca.category_id
         , post_content
         , create_dt
         , thumbnail

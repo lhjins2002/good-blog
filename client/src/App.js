@@ -56,6 +56,7 @@ function App() {
           <Route path='' element={<ManageBlog />} />
           <Route path='category' element={<ManageCategory />} />
           <Route path='post' element={<ManagePost />} />
+          <Route path='post/:post_id' element={<ManagePost />} />
           <Route path='profile' element={<ManageProfile />} />
         </Route>
         <Route path='/login' element={<Login />} />

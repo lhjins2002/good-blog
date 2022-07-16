@@ -132,11 +132,11 @@ class ManageBlog extends React.Component {
                         블로그 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation type="submit" theme={this.theme} size='large'>
+                        <Button variant="contained" disableElevation type="submit" theme={this.theme}>
                             저장
                         </Button>
                     </div>
-                    <div style={{marginTop:16}}>
+                    <div style={{marginTop:30}}>
                     <ThemeProvider theme={this.theme}>
                         <TextField
                         value={this.state.blog_name}

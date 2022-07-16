@@ -14,7 +14,6 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { IconButton } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -22,6 +21,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { createTheme } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
+import DialogContentText from '@mui/material/DialogContentText';
+import ButtonGroup from '@mui/material/ButtonGroup';
 
 class ManageCategory extends React.Component {
     constructor(props) {
@@ -34,6 +35,11 @@ class ManageCategory extends React.Component {
             ],
             rows: [],
             modalOpen: false,
+            deleteAlertOpen: false,
+            selectCateId: '',
+            category_order: '',
+            category_name: '',
+            mode:'add',
         }
     }
 
@@ -71,9 +77,11 @@ class ManageCategory extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
-    callDeleteCategoryApi = async (cate_id) => {
-        axios.post('/manage?type=deleteCategory', {
-            cate_id : cate_id,
+    callModifyCategoryApi = async (data) => {
+        axios.post('/manage?type=modifyCategory', {
+            cate_id : this.state.selectCateId,
+            category_name : data.get('name'),
+            category_order : data.get('order'),
         })
         .then( response => {
             try {
@@ -85,12 +93,30 @@ class ManageCategory extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+
+    callDeleteCategoryApi = async (cate_id) => {
+        axios.post('/manage?type=deleteCategory', {
+            cate_id : cate_id,
+        })
+        .then( response => {
+            try {
+                this.callBlogCategoryApi();
+                this.handleClose();
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
+    //카테고리 추가 버튼 이벤트
     handleClickOpen = () => {
-        this.setState({modalOpen : true});
+        this.setState({modalOpen : true, mode:'add', selectCateId : '', category_name:'', category_order:''});
     };
     
     handleClose = () => {
-        this.setState({modalOpen : false});
+        this.setState({modalOpen : false, deleteAlertOpen : false,});
+        
     };
 
     handleSubmit = (event) => {
@@ -100,14 +126,35 @@ class ManageCategory extends React.Component {
         console.log(valid);
 
         if(valid){
-            this.callAddCategoryApi(data);
+            if(this.state.mode == 'add'){
+                this.callAddCategoryApi(data);
+            }else{
+                this.callModifyCategoryApi(data);
+            }
+            
         }
 
         this.setState({modalOpen : false});
     };
 
+    //카테고리 삭제 버튼 이벤트
     handleDelete = (cate_id) => {
-        this.callDeleteCategoryApi(cate_id);
+        //this.callDeleteCategoryApi(cate_id);
+        this.setState({ deleteAlertOpen : true, selectCateId : cate_id, });
+    }
+
+    //카테고리 수정 버튼 이벤트
+    handleModify = (cate_id, cate_name, cate_order) => {
+        //this.callDeleteCategoryApi(cate_id);
+        this.setState({modalOpen : true, mode:'modify', selectCateId : cate_id, category_name:cate_name, category_order:cate_order});
+    }
+
+    handleCateNameChange = (event) => {
+        this.setState({ category_name: event.target.value })
+    }
+
+    handleCateOrderChange = (event) => {
+        this.setState({ category_order: event.target.value })
     }
 
     theme = createTheme({
@@ -133,7 +180,7 @@ class ManageCategory extends React.Component {
                             추가
                         </Button>
                     </div>
-                    <TableContainer component={Paper} style={{marginTop:16}} variant="outlined">
+                    <TableContainer component={Paper} style={{marginTop:30}} variant="outlined">
                         <Table aria-label="simple table">
                             <TableHead>
                             <TableRow>
@@ -156,12 +203,14 @@ class ManageCategory extends React.Component {
                                     </TableCell>
                                     
                                     <TableCell align="right">
-                                        <IconButton aria-label="edit">
+                                    <ButtonGroup variant="outlined" aria-label="outlined button group" size="small">
+                                        <Button theme={this.theme} onClick={this.handleModify.bind(this, row.category_id, row.category_name, row.category_order)}>
                                             <EditIcon />
-                                        </IconButton>
-                                        <IconButton aria-label="delete" onClick={this.handleDelete.bind(this, row.category_id)}>
+                                        </Button>
+                                        <Button theme={this.theme} onClick={this.handleDelete.bind(this, row.category_id)}>
                                             <DeleteIcon />
-                                        </IconButton>
+                                        </Button>
+                                    </ButtonGroup>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -182,6 +231,8 @@ class ManageCategory extends React.Component {
                             type="text"
                             fullWidth
                             variant="outlined"
+                            value={this.state.category_name}
+                            onChange={this.handleCateNameChange}
                         />
                         <TextField
                             margin="dense"
@@ -191,11 +242,29 @@ class ManageCategory extends React.Component {
                             type="number"
                             fullWidth
                             variant="outlined"
+                            value={this.state.category_order}
+                            onChange={this.handleCateOrderChange}
                         />
                         </DialogContent>
                         <DialogActions>
                         <Button onClick={this.handleClose}>취소</Button>
                         <Button type="submit">확인</Button>
+                        </DialogActions>
+                        </Box>
+                    </ThemeProvider>
+                    </Dialog>
+                    <Dialog open={this.state.deleteAlertOpen} onClose={this.handleClose}>
+                    <ThemeProvider theme={this.theme}>
+                    <Box>
+                        <DialogTitle>확인</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                카테고리를 삭제하시겠습니까?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={this.handleClose}>취소</Button>
+                        <Button onClick={this.callDeleteCategoryApi.bind(this, this.state.selectCateId)}>확인</Button>
                         </DialogActions>
                         </Box>
                     </ThemeProvider>

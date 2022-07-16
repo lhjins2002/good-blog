@@ -52,6 +52,20 @@
       'Y',
       #{thumbnail})
   </insert>
+  <update id="updatePost">
+    UPDATE good_blog.tb_posts
+		SET category_id = #{category_id},
+        post_name = #{post_name},
+		post_content = #{post_content},
+		update_dt = SYSDATE(),
+		use_yn = 'Y',
+		thumbnail = #{thumbnail}
+	  WHERE post_id = #{post_id}
+  </update>
+  <delete id="deletePost">
+    DELETE FROM good_blog.tb_posts
+	  WHERE post_id = #{post_id}
+  </delete>
   <select id="selectBlog">
       SELECT 
         blog_id
@@ -86,4 +100,11 @@
   <delete id="deleteCategory">
     DELETE FROM good_blog.tb_categorys WHERE category_id = #{cate_id}
   </delete>
+  <update id="updateCategory">
+      UPDATE good_blog.tb_categorys
+      SET category_name = #{category_name},
+        category_order = #{category_order},
+        use_yn = 'Y'
+      WHERE category_id = #{cate_id}
+  </update>
 </mapper>

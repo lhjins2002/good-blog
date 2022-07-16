@@ -5,7 +5,7 @@ import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/joy/Typography';
+import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -105,6 +105,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
   const [blogName, setBlogName] = React.useState("");
   const [blogTheme, setBlogTheme] = React.useState("");
+  const [blogLink, setBlogLink] = React.useState("");
 
   const theme = createTheme({
     palette: {
@@ -163,6 +164,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         try {
           setBlogName(response.data.json[0].blog_name);
           setBlogTheme(response.data.json[0].blog_theme);
+          setBlogLink('/blog/' + user_id);
         } catch (error) {
             alert('작업중 오류가 발생하였습니다.');
         }
@@ -207,6 +209,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
                 <Route path='' element={<ManageBlog owner_id={user_id} />} />
                 <Route path='category' element={<ManageCategory owner_id={user_id} />} />
                 <Route path='post' element={<ManagePost owner_id={user_id} />} />
+                <Route path='post/:post_id' element={<ManagePost owner_id={user_id} post_id={post_id} />} />
                 <Route path='profile' element={<ManageProfile owner_id={user_id} />} />
               </Routes>);
 
@@ -249,7 +252,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
           >
             <MenuIcon />
           </IconButton>
-          <Typography level="h5" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" component={Link} to={blogLink} sx={{ flexGrow: 1, textDecoration:'none', color:'inherit' }}>
             {blogName}
           </Typography>
           {!auth && <Button color="inherit" onClick={goLogin}>로그인</Button>}

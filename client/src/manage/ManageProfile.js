@@ -68,14 +68,6 @@ class ManageProfile extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
-    handleClickOpen = () => {
-        this.setState({modalOpen : true});
-    };
-    
-    handleClose = () => {
-        this.setState({modalOpen : false});
-    };
-
     handleSubmit = (event) => {
 
         const data = new FormData(event.currentTarget);
@@ -136,12 +128,12 @@ class ManageProfile extends React.Component {
                         프로필 설정
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation type="submit" theme={this.theme} size='large'>
+                        <Button variant="contained" disableElevation type="submit" theme={this.theme}>
                             저장
                         </Button>
                     </div>
                     
-                    <div style={{marginTop:16}}>
+                    <div style={{marginTop:30}}>
                     <ThemeProvider theme={this.theme}>
                         <TextField
                         value={this.state.user_name}
@@ -159,7 +151,6 @@ class ManageProfile extends React.Component {
                         value={this.state.introduce}
                         onChange={(event) => this.setState({introduce:event.target.value})}
                         margin="dense"
-                        required
                         fullWidth
                         name="introduce"
                         label="자기소개"

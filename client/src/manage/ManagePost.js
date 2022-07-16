@@ -28,19 +28,52 @@ class ManagePost extends React.Component {
     constructor(props) {
         super(props);
 
+        let mode = 'add';
+        if(props.post_id != null && props.post_id != ''){
+            mode = 'modify';
+        }
+
         this.state = {
             owner_id: props.owner_id,
+            post_id: props.post_id,
             rows: [],
             text: '',
             selCategory: '',
             thumbnail: '',
             noCateAlertOpen: false,
+            subject:'',
+            mode: mode,
         }
 
     }
 
     componentDidMount() {
-        this.callBlogCategoryApi()
+        this.callBlogCategoryApi();
+
+        //post_id가 있을 경우 수정 모드
+        if(this.state.mode == 'modify'){
+            this.callBlogViewApi();
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.post_id !== prevProps.post_id || this.state.post_id !== prevState.post_id){
+            this.setState({ post_id:this.props.post_id});
+            
+            let mode = 'add';
+            if(this.props.post_id != null && this.props.post_id != ''){
+                mode = 'modify';
+            }
+            this.setState({mode:mode});
+
+            if(mode == 'add'){
+                this.setState({ text: '',
+                    subject: '',
+                    thumbnail: '',
+                    selCategory: '',
+                });
+            }
+        }
     }
 
     callBlogCategoryApi = async () => {
@@ -55,6 +88,27 @@ class ManagePost extends React.Component {
                 }
                 
                 this.setState({ rows: response.data.json });
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
+    callBlogViewApi = async () => {
+        axios.post('/blog?type=view', {
+            owner_id : this.state.owner_id,
+            post_id : this.state.post_id
+        })
+        .then( response => {
+            try {
+
+                this.setState({ text: response.data.json[0].post_content,
+                                subject: response.data.json[0].post_name,
+                                thumbnail: response.data.json[0].thumbnail,
+                                selCategory: response.data.json[0].category_id,
+                });
+                
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -80,8 +134,32 @@ class ManagePost extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //포스팅 수정 API 호출
+    callModifyPostApi = async (data) => {
+        axios.post('/manage?type=modifyPost', {
+            category_id : data.get("category"),
+            post_name : data.get("subject"),
+            post_content : this.state.text,
+            thumbnail : this.state.thumbnail,
+            post_id : this.state.post_id
+        })
+        .then( response => {
+            try {
+                //this.callBlogCategoryApi();
+                this.props.navigate('/blog/' + this.state.owner_id);
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
     handleEditorChange = (event) => {
         this.setState({ text: event })
+    }
+
+    handleSubjectChange = (event) => {
+        this.setState({ subject: event.target.value })
     }
 
     handleCateChange= (event) => {
@@ -96,7 +174,11 @@ class ManagePost extends React.Component {
         console.log(valid);
 
         if(valid){
-            this.callAddPostApi(data);
+            if(this.state.mode == 'add'){
+                this.callAddPostApi(data);
+            }else{
+                this.callModifyPostApi(data);
+            }
         }
 
     };
@@ -191,14 +273,15 @@ class ManagePost extends React.Component {
             <Container maxWidth="md">
                 <Box sx={{ minWidth: 275 }} style={{marginTop:30}} component="form" noValidate onSubmit={this.handleSubmit}>
                     <Typography level="h3" component="div">
-                        글 쓰기
+                        {this.state.mode == "add" && '글 쓰기'}
+                        {this.state.mode == "modify" && '글 수정'}
                     </Typography>
                     <div style={{marginTop:30}}>
-                        <Button variant="contained" disableElevation type="submit" theme={this.theme} size='large'>
+                        <Button variant="contained" disableElevation type="submit" theme={this.theme}>
                             저장
                         </Button>
                     </div>
-                    <div style={{marginTop:16}}>
+                    <div style={{marginTop:30}}>
                     <ThemeProvider theme={this.theme}>
                     <FormControl fullWidth required>
                     <InputLabel id="demo-simple-select-label">카테고리명</InputLabel>
@@ -224,6 +307,8 @@ class ManagePost extends React.Component {
                         type="text"
                         id="subject"
                         autoComplete="subject"
+                        value={this.state.subject || ''}
+                        onChange={this.handleSubjectChange}
                         />
                     </ThemeProvider>
                     </div>

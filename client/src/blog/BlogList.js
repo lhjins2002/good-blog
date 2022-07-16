@@ -38,8 +38,9 @@ class BlogList extends React.Component {
         }
     }
 
-    componentDidUpdate(prevProps){
-        if(this.props.owner_id !== prevProps.owner_id || this.props.cate_id !== prevProps.cate_id){
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.owner_id !== prevProps.owner_id || this.props.cate_id !== prevProps.cate_id || this.state.owner_id !== prevState.owner_id){
+            this.setState({ owner_id:this.props.owner_id});
             if(this.props.cate_id != null){
                 this.callBlogListByCategoryApi(this.props.cate_id);
                 this.callCategoryNameApi(this.props.cate_id);

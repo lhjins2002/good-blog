@@ -14,6 +14,5 @@
       FROM good_blog.tb_posts po, good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_users ur
       WHERE po.category_id = ca.category_id AND ca.blog_id = bl.blog_id AND bl.user_id = ur.user_id
       order by po.create_dt desc
-      LIMIT 10
   </select>
 </mapper>

@@ -31,6 +31,12 @@ router.post('/', (req, res, next) => {
     }else if(type == "addPost"){
         req.body.crud = 'insert';//select, insert, update, delete 중에 입력
         req.body.mapper_id = 'insertPost';
+    }else if(type == "modifyPost"){
+        req.body.crud = 'update';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'updatePost';
+    }else if(type == "deletePost"){
+        req.body.crud = 'delete';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'deletePost';
     }else if(type == 'blog'){
         //최신 리스트 조회
         req.body.crud = 'select';//select, insert, update, delete 중에 입력
@@ -51,6 +57,10 @@ router.post('/', (req, res, next) => {
         //최신 리스트 조회
         req.body.crud = 'delete';//select, insert, update, delete 중에 입력
         req.body.mapper_id = 'deleteCategory';
+    }else if(type == 'modifyCategory'){
+        //최신 리스트 조회
+        req.body.crud = 'update';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'updateCategory';
     }
 
     router.use('/', dbconnect_Module);

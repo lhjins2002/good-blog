@@ -169,10 +169,13 @@ export default function Main() {
         </Container>
       </AppBar>
       <Toolbar />
-      <div style={{borderBottom:'1px solid #E7EBF0', minHeight:150}}>
-      <Container maxWidth="md" style={{paddingTop:25, paddingBottom:25}}>
-        <Typography level="h4">
-              블로그 서비스 Good Blog입니다.
+      <div style={{borderBottom:'1px solid #E7EBF0',backgroundColor:'#f8f8f8', minHeight:150}}>
+      <Container maxWidth="md" style={{paddingTop:40, paddingBottom:40}}>
+        <Typography level="h3">
+              블로그 서비스
+        </Typography>
+        <Typography level="body1" style={{marginTop:10, }}>
+              내 블로그에 글을 써보세요.
         </Typography>
         <Button variant="contained" disableElevation style={{marginTop:16, }} size="large" theme={theme} component={Link} to="/manage/post">
             시작하기
