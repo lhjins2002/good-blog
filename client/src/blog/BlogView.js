@@ -20,23 +20,24 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ThemeProvider } from '@mui/material/styles';
+import Divider from '@mui/material/Divider';
 
 class BlogView extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            owner_id: props.owner_id,
-            post_id: props.post_id,
-            text: '',
-            subject: '',
-            thumbnail:'',
-            user_name:'',
-            photo:'',
-            reg_date:'',
-            category_name:'',
-            my_post:false,
-            deleteAlertOpen:false,
+            owner_id: props.owner_id,   //블로그 주인 ID
+            post_id: props.post_id,     //글 ID
+            text: '',                   //글 본문 내용
+            subject: '',                //글 제목
+            thumbnail:'',               //글 썸네일 이미지
+            user_name:'',               //작성자 이름
+            photo:'',                   //작성자 프로필 이미지
+            reg_date:'',                //작성일
+            category_name:'',           //카테고리명
+            my_post:false,              //내 글인지 여부(수정/삭제 버튼 표시 여부)
+            deleteAlertOpen:false,      //글 삭제 알림 창 표시 여부
         }
 
     }
@@ -49,6 +50,7 @@ class BlogView extends React.Component {
         this.callSessionConfirmApi();
     }
 
+    //로그인 체크
     callSessionConfirmApi = async () => {
         axios.post('/member?type=SessionConfirm', {
             token1 : cookie.load("userid"),
@@ -74,6 +76,7 @@ class BlogView extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //글 정보 조회
     callBlogViewApi = async () => {
         axios.post('/blog?type=view', {
             owner_id : this.state.owner_id,
@@ -104,6 +107,7 @@ class BlogView extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //글 삭제 처리
     callDeletePostApi = async () => {
         axios.post('/manage?type=deletePost', {
             post_id : this.state.post_id
@@ -111,6 +115,7 @@ class BlogView extends React.Component {
         .then( response => {
             try {
 
+                //글 삭제 후 블로그 메인으로 이동
                 this.props.navigate('/blog/' + this.state.owner_id);
                 
             } catch (error) {
@@ -120,18 +125,26 @@ class BlogView extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //글 수정 버튼 클릭 이벤트
     handleModifyClick = () => {
         this.props.navigate('/manage/post/' + this.state.post_id);
     }
 
+    //글 삭제 버튼 클릭 이벤트
     handleDeleteClick = () => {
         //this.callDeletePostApi();
         this.setState({ deleteAlertOpen : true });
     }
 
+    //글 삭제 알림창 닫기 이벤트
     handleClose = () => {
         this.setState({deleteAlertOpen : false});
     };
+
+    //프로필 이미지 클릭 이벤트
+    handleProfileClick = () => {
+        this.props.navigate('/blog/' + this.state.owner_id);
+    }
 
     theme = createTheme({
         palette: {
@@ -159,7 +172,7 @@ class BlogView extends React.Component {
                     </CssVarsProvider>
                     <Box sx={{ display: 'flex', gap: 1.5, marginTop:'16px' }}>
                         <CssVarsProvider>
-                        <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} />
+                        <Avatar alt={this.state.user_name} src={"/image/" + this.state.photo} onClick={this.handleProfileClick}/>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                             <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
                                 {this.state.user_name}
@@ -195,6 +208,7 @@ class BlogView extends React.Component {
                     </div>
                     </div>
                 </Box>
+                <Divider style={{marginTop:50}} />
                 <Dialog open={this.state.deleteAlertOpen} onClose={this.handleClose}>
                     <ThemeProvider theme={this.theme}>
                     <Box>

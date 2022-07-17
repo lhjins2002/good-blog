@@ -19,19 +19,20 @@ class BlogList extends React.Component {
         super(props);
 
         this.state = {
-            owner_id: props.owner_id,
-            cate_id: props.cate_id,
-            append_BlogList: [],
-            user_name: '',
-            photo: '',
-            introduce: '',
-            back_photo: '',
-            cate_name:'',
-            limit:0,
-            showMore:false,
+            owner_id: props.owner_id,   //블로그 주인 ID
+            cate_id: props.cate_id,     //선택한 카테고리 ID
+            append_BlogList: [],        //글 리스트 배열
+            user_name: '',              //블로그 주인 닉네임
+            photo: '',                  //블로그 주인 프로필 이미지
+            introduce: '',              //블로그 주인 프로필 자기소개
+            back_photo: '',             //블로그 주인 프로필 배경 이미지
+            cate_name:'',               //선택한 카테고리명
+            limit:0,                    //현재 페이징 시작 번호
+            showMore:false,             //더보기 표시 여부
         }
     }
 
+    //컴포넌트 마운트 후 실행
     componentDidMount() {
         
         if(this.state.cate_id != null){
@@ -43,6 +44,7 @@ class BlogList extends React.Component {
         }
     }
 
+    //컴포넌트 업데이트 후 실행
     componentDidUpdate(prevProps, prevState){
         if(this.props.owner_id !== prevProps.owner_id || this.props.cate_id !== prevProps.cate_id || this.state.owner_id !== prevState.owner_id){
             this.setState({ owner_id:this.props.owner_id, limit:0, append_BlogList: []});
@@ -56,6 +58,7 @@ class BlogList extends React.Component {
         }
     }
 
+    //현재 블로그 주인의 프로필 정보 가져오기
     callProfileInfoApi = async () => {
         axios.post('/blog?type=profileinfo', {
             owner_id : this.state.owner_id,
@@ -73,6 +76,7 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //현재 블로그의 전체 글 리스트 가져오기
     callBlogListApi = async (limit) => {
 
         if(limit != 0){
@@ -93,6 +97,7 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //선택한 카테고리가 있을 경우 해당 카테고리의 글만 가져오기
     callBlogListByCategoryApi = async (cate_id, limit) => {
 
         if(limit != 0){
@@ -114,6 +119,7 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //선택된 카테고리ID에 대한 카테고리 이름과 글 개수 가져오기
     callCategoryNameApi = async (cate_id) => {
         axios.post('/blog?type=categoryName', {
             cate_id : cate_id,
@@ -131,10 +137,12 @@ class BlogList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //조회페이지 이동 이벤트
     handlePostClick = (post_id) => {
         this.props.navigate('/view/' + this.state.owner_id + '/' + post_id);
     }
 
+    //글 리스트 그리기
     BlogListAppend = (response) => {
         let result = []
         var blogList = response.data;
@@ -179,7 +187,7 @@ class BlogList extends React.Component {
                                     {data.post_name}
                                 </Typography>
                                 <Typography fontSize="sm" aria-describedby="card-description" mb={1} sx={{ color: 'text.tertiary' }}>
-                                    {reg_date}
+                                    {reg_date} | {!this.props.cate_id && data.category_name}
                                 </Typography>
                                 <Typography level="body2" style={{maxHeight:42,overflow:'hidden'}}>
                                     {postContent}

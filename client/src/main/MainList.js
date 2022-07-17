@@ -10,22 +10,25 @@ import { CssVarsProvider } from '@mui/joy/styles';
 import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Fragment } from 'react';
+import { createTheme } from '@mui/material';
 
 class MainList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            append_MainList: [],
-            limit:0,
-            showMore:false,
+            append_MainList: [],    //사이트 전체 글 목록 배열
+            limit:0,                //페이징 시작 번호
+            showMore:false,         //더보기버튼 표시 여부
         }
     }
 
+    //컴포넌트 마운팅된 후 실행
     componentDidMount() {
         this.callMainListApi()
     }
 
+    //사이트 전체 글 가져오기
     callMainListApi = async () => {
         axios.post('/main?type=poplist', {
             limit:this.state.limit
@@ -40,10 +43,18 @@ class MainList extends React.Component {
         .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
     }
 
+    //글 클릭 이벤트
     handlePostClick = (user_id, post_id) => {
         this.props.navigate('/view/' + user_id + '/' + post_id);
     }
 
+    //프로필 이미지 클릭 이벤트
+    handleProfileClick = (user_id, e) => {
+        e.stopPropagation();
+        this.props.navigate('/blog/' + user_id);
+    }
+
+    //글 목록 그리기
     MainListAppend = (response) => {
         let result = []
         var mainList = response.data;
@@ -69,7 +80,7 @@ class MainList extends React.Component {
             result.push(
                 <Card variant="outlined" sx={{ minWidth: '320px' }} key={data.post_id} style={{marginTop:16}} onClick={this.handlePostClick.bind(this, data.user_id, data.post_id)}>
                     <Box sx={{ display: 'flex', gap: 1.5 }}>
-                        <Avatar alt={data.user_name} src={"/image/" + data.photo} />
+                        <Avatar alt={data.user_name} src={"/image/" + data.photo} onClick={this.handleProfileClick.bind(this, data.user_id)}/>
                         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
                             <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
                                 {data.post_name}
@@ -97,6 +108,17 @@ class MainList extends React.Component {
         
         this.setState({append_MainList : this.state.append_MainList.concat(result)});
     }
+
+    theme = createTheme({
+        palette: {
+          primary: {
+            main: "#183F48",
+          },
+          secondary: {
+            main: "#D3AC2B",
+          },
+        },
+      });
 
     render () {
         return (

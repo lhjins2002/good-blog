@@ -336,7 +336,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         open={open}
       >
         <DrawerHeader>
-          <Typography level="h5" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#183F48', }}>
+          <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#183F48', }}>
               Good Blog
             </Typography>
           <IconButton onClick={handleDrawerClose}>
