@@ -209,7 +209,7 @@ class BlogView extends React.Component {
                     </div>
                     </div>
                 </Box>
-                <Divider style={{marginTop:50}} />
+                <Divider style={{marginTop:100}} />
                 <BlogComment post_id={this.state.post_id} />
                 <Dialog open={this.state.deleteAlertOpen} onClose={this.handleClose}>
                     <ThemeProvider theme={this.theme}>

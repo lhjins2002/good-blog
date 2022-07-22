@@ -12,6 +12,12 @@ import IconButton from '@mui/material/IconButton';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import Button from '@mui/material/Button';
 import { useParams } from "react-router";
+import Sheet from '@mui/joy/Sheet';
+import List from '@mui/joy/List';
+import ListDivider from '@mui/joy/ListDivider';
+import ListItem from '@mui/joy/ListItem';
+import ListItemDecorator from '@mui/joy/ListItemDecorator';
+import ListItemContent from '@mui/joy/ListItemContent';
 
 export default function BlogComment() {
 
@@ -91,7 +97,7 @@ export default function BlogComment() {
   }
 
   return (
-    <Box sx={{ minWidth: 275 }} style={{marginTop:16}}>
+    <Box sx={{ minWidth: 275 }} style={{marginTop:30}}>
       <Box  sx={{ display: 'flex', gap: 1}}>
         <CssVarsProvider>
           <Typography level="h5" component="div">
@@ -100,9 +106,11 @@ export default function BlogComment() {
           
         </CssVarsProvider>
 
+        <div style={{marginLeft:'auto'}}>
           <IconButton theme={theme} size="small">
               <RefreshIcon />
           </IconButton>
+        </div>
       </Box>
       
       <ThemeProvider theme={theme}>
@@ -120,6 +128,47 @@ export default function BlogComment() {
               등록
           </Button>
       </div>
+      <Sheet variant="outlined" sx={{ borderRadius: 'sm', marginTop:'30px' }}>
+        <List
+          sx={{
+            paddingBlock: 1,
+            minWidth: 240,
+            '--List-decorator-width': '48px',
+            '--List-item-paddingLeft': '1.5rem',
+            '--List-item-paddingRight': '1rem',
+          }}
+        >
+          <ListItem>
+            <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
+              <Avatar size="sm" src="/static/images/avatar/1.jpg" />
+            </ListItemDecorator>
+            <ListItemContent>
+            <Typography level="h2" fontSize="sm">
+                혁진이
+            </Typography>
+              <Typography level="body1" fontSize="sm">
+                  오 너무 맛있어 보인다. ㅎㅎ
+                  오 너무 맛있어 보인다. ㅎㅎ오 너무 맛있어 보인다. ㅎㅎ오 너무 맛있어 보인다. ㅎㅎ
+              </Typography>
+            </ListItemContent>
+          </ListItem>
+          <ListDivider inset={'gutter'} />
+          <ListItem>
+            <ListItemDecorator sx={{ alignSelf: 'flex-start' }}>
+              <Avatar size="sm" src="/static/images/avatar/2.jpg" />
+            </ListItemDecorator>
+            <ListItemContent>
+              <Typography level="h2" fontSize="sm">
+                  상욱이
+              </Typography>
+                <Typography level="body1" fontSize="sm">
+                오 너무 맛있어 보인다. ㅎㅎ
+                  오 너무 맛있어 보인다. ㅎㅎ오 너무 맛있어 보인다. ㅎㅎ오 너무 맛있어 보인다. ㅎㅎ
+                </Typography>
+            </ListItemContent>
+          </ListItem>
+        </List>
+      </Sheet>
       
       
     </Box>
