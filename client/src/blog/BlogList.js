@@ -187,7 +187,7 @@ class BlogList extends React.Component {
                                     {data.post_name}
                                 </Typography>
                                 <Typography fontSize="sm" aria-describedby="card-description" mb={1} sx={{ color: 'text.tertiary' }}>
-                                    {reg_date} | {!this.props.cate_id && data.category_name}
+                                    {reg_date}{!this.props.cate_id && ' | ' + data.category_name}
                                 </Typography>
                                 <Typography level="body2" style={{maxHeight:42,overflow:'hidden'}}>
                                     {postContent}
@@ -283,7 +283,7 @@ class BlogList extends React.Component {
                     </div>  
                     
                 </CssVarsProvider>
-                {this.state.showMore && <div style={{marginTop:30}}> 
+                {this.state.showMore && <div style={{marginTop:16}}> 
                     <Button variant="outlined" component="span" startIcon={<ExpandMoreIcon />} theme={this.theme}
                     fullWidth
                     size='large'

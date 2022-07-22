@@ -21,6 +21,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { ThemeProvider } from '@mui/material/styles';
 import Divider from '@mui/material/Divider';
+import BlogComment from './BlogComment';
 
 class BlogView extends React.Component {
     constructor(props) {
@@ -209,6 +210,7 @@ class BlogView extends React.Component {
                     </div>
                 </Box>
                 <Divider style={{marginTop:50}} />
+                <BlogComment post_id={this.state.post_id} />
                 <Dialog open={this.state.deleteAlertOpen} onClose={this.handleClose}>
                     <ThemeProvider theme={this.theme}>
                     <Box>

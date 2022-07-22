@@ -252,7 +252,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component={Link} to={blogLink} sx={{ flexGrow: 1, textDecoration:'none', color:'inherit' }}>
+          <Typography variant="h6" noWrap component={Link} to={blogLink} sx={{ flexGrow: 1, textDecoration:'none', color:'inherit' }}>
             {blogName}
           </Typography>
           {!auth && <Button color="inherit" onClick={goLogin}>로그인</Button>}

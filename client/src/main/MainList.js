@@ -128,7 +128,7 @@ class MainList extends React.Component {
                         {this.state.append_MainList}
                     </div>
                 </CssVarsProvider>
-                    {this.state.showMore && <div style={{marginTop:30}}> 
+                    {this.state.showMore && <div style={{marginTop:16}}> 
                         <Button variant="outlined" component="span" startIcon={<ExpandMoreIcon />} theme={this.theme}
                         fullWidth
                         size='large'
