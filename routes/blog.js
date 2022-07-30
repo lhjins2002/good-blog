@@ -42,6 +42,18 @@ router.post('/', (req, res, next) => {
     }else if(type == "categoryName"){
         req.body.crud = 'select';//select, insert, update, delete 중에 입력
         req.body.mapper_id = 'selectCategoryName';
+    }else if(type == "addComment"){
+        req.body.crud = 'insert';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'insertComment';
+    }else if(type == "commentList"){
+        req.body.crud = 'select';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'selectCommentList';
+    }else if(type == 'commentCount'){
+        req.body.crud = 'select';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'selectCommentCount';
+    }else if(type == 'deleteComment'){
+        req.body.crud = 'delete';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'deleteComment';
     }
 
     router.use('/', dbconnect_Module);

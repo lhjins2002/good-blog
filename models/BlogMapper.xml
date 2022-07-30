@@ -81,4 +81,42 @@
       WHERE ca.category_id = #{cate_id}
       GROUP BY ca.category_id, ca.category_name 
   </select>
+  <insert id="insertComment">
+      INSERT INTO good_blog.tb_comments
+      (post_id,
+      user_id,
+      comment_content,
+      create_dt,
+      update_dt)
+      VALUES
+      (#{post_id},
+      #{user_id},
+      #{comment_content},
+      SYSDATE(),
+      SYSDATE())
+  </insert>
+  <select id="selectCommentList">
+      SELECT
+          co.comment_id,
+          co.comment_content,
+          co.create_dt,
+          ur.user_id,
+          ur.user_name,
+          ur.photo
+      FROM good_blog.tb_comments co, good_blog.tb_users ur
+      WHERE co.user_id = ur.user_id
+      AND co.post_id = #{post_id}
+      ORDER BY co.create_dt
+  </select>
+  <select id="selectCommentCount">
+      SELECT
+          count(co.comment_id) AS cnt
+      FROM good_blog.tb_comments co, good_blog.tb_users ur
+      WHERE co.user_id = ur.user_id
+      AND co.post_id = #{post_id}
+  </select>
+  <delete id="deleteComment">
+    DELETE FROM good_blog.tb_comments
+	  WHERE comment_id = #{comment_id}
+  </delete>
 </mapper>
