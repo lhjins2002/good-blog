@@ -166,7 +166,7 @@ export default function BlogComment() {
                     </div>
                 }
                 </Box>
-                <Typography level="body1" fontSize="sm" style={{marginTop:10}}>
+                <Typography level="body1" fontSize="sm" style={{marginTop:10, whiteSpace:'pre-wrap'}}>
                   {comment_content}
                   </Typography>
               </ListItemContent>
