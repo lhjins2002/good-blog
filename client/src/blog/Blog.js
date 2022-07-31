@@ -190,7 +190,7 @@ const drawerWidth = 240;
   const container = window !== undefined ? () => window().document.body : undefined;
 
   const drawer = (
-    <div>
+    <div onClick={handleDrawerToggle}>
       <Toolbar style={{padding:'0 16px'}}>
         <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, textDecoration:'none', color:'#183F48', }}>
             Good Blog

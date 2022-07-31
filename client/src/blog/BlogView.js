@@ -39,14 +39,17 @@ class BlogView extends React.Component {
             category_name:'',           //카테고리명
             my_post:false,              //내 글인지 여부(수정/삭제 버튼 표시 여부)
             deleteAlertOpen:false,      //글 삭제 알림 창 표시 여부
+            hit:0,                      //조회수
         }
 
     }
 
     //컴포넌트 마운팅된 후 실행
     componentDidMount() {
-        //포스팅 정보 가져오기
-        this.callBlogViewApi();
+
+        //조회수 업데이트
+        this.callUpdatePostHit();
+        
         //내 글인지 체크
         this.callSessionConfirmApi();
     }
@@ -99,7 +102,26 @@ class BlogView extends React.Component {
                                 photo: response.data.json[0].photo,
                                 reg_date: reg_date,
                                 category_name: response.data.json[0].category_name,
+                                hit: response.data.json[0].hit
                 });
+                
+            } catch (error) {
+                alert('작업중 오류가 발생하였습니다.');
+            }
+        })
+        .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
+    }
+
+    //조회수 업데이트
+    callUpdatePostHit = async () => {
+        axios.post('/blog?type=updatePostHit', {
+            post_id : this.state.post_id
+        })
+        .then( response => {
+            try {
+
+                //포스팅 정보 가져오기
+                this.callBlogViewApi();
                 
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
@@ -178,8 +200,9 @@ class BlogView extends React.Component {
                             <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
                                 {this.state.user_name}
                             </Typography>
-                            <Typography level="body2">{this.state.reg_date}</Typography>
+                            <Typography level="body2">{this.state.reg_date} | 조회수 {this.state.hit}</Typography>
                         </Box>
+                        
                         </CssVarsProvider>
                         {this.state.my_post &&
                             <div style={{marginLeft:'auto'}}>

@@ -29,6 +29,8 @@ class BlogList extends React.Component {
             cate_name:'',               //선택한 카테고리명
             limit:0,                    //현재 페이징 시작 번호
             showMore:false,             //더보기 표시 여부
+            totalCnt:0,                 //블로그 전체 글 수
+            hitCnt:0,
         }
     }
 
@@ -69,6 +71,8 @@ class BlogList extends React.Component {
                 this.setState({ photo: response.data.json[0].photo });
                 this.setState({ introduce: response.data.json[0].introduce });
                 this.setState({ back_photo: response.data.json[0].back_photo });
+                this.setState({ totalCnt: response.data.json[0].cnt });
+                this.setState({ hitCnt: response.data.json[0].hitCnt });
             } catch (error) {
                 alert('작업중 오류가 발생하였습니다.');
             }
@@ -262,11 +266,11 @@ class BlogList extends React.Component {
                             }}
                         >
                             <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-                            전체글 123
+                            전체글 {this.state.totalCnt}
                             </Typography>
                             <Box sx={{ width: 2, bgcolor: 'divider' }} />
                             <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }}>
-                            조회수 456
+                            조회수 {this.state.hitCnt}
                             </Typography>
                         </CardOverflow>
                         </Card>

@@ -17,7 +17,7 @@
   <select id="selectPostList">
       SELECT 
         post_id
-          , post_name
+        , post_name
         , category_name
         , post_content
         , create_dt
@@ -42,6 +42,11 @@
       order by po.create_dt desc
       limit ${limit}, 10
   </select>
+  <update id="updatePostHit">
+      UPDATE good_blog.tb_posts
+      SET hit = hit + 1
+      WHERE post_id = #{post_id}
+  </update>
   <select id="selectPostView">
       SELECT 
         post_name
@@ -52,9 +57,10 @@
         , thumbnail
         , ur.user_name
         , ur.photo
+        , po.hit
       FROM good_blog.tb_categorys ca, good_blog.tb_blogs bl, good_blog.tb_posts po, good_blog.tb_users ur
       WHERE ca.blog_id = bl.blog_id AND ca.category_id = po.category_id AND bl.user_id = ur.user_id
-      AND bl.user_id = #{owner_id} AND po.post_id = #{post_id} 
+      AND bl.user_id = #{owner_id} AND po.post_id = #{post_id}
   </select>
   <select id="selectBlogInfo">
       SELECT 
@@ -69,6 +75,14 @@
         , photo
         , introduce
         , back_photo
+        , (SELECT COUNT(po.post_id) 
+        FROM good_blog.tb_posts po, good_blog.tb_categorys ca, good_blog.tb_blogs bl
+        WHERE po.category_id = ca.category_id AND ca.blog_id = bl.blog_id
+        AND bl.user_id = #{owner_id}) AS cnt
+        , (SELECT SUM(po.hit) 
+        FROM good_blog.tb_posts po, good_blog.tb_categorys ca, good_blog.tb_blogs bl
+        WHERE po.category_id = ca.category_id AND ca.blog_id = bl.blog_id
+        AND bl.user_id = #{owner_id}) AS hitCnt
       FROM good_blog.tb_users
       WHERE user_id = #{owner_id}
   </select>

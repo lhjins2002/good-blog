@@ -11,6 +11,9 @@ import Button from '@mui/material/Button';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Fragment } from 'react';
 import { createTheme } from '@mui/material';
+import CardOverflow from '@mui/joy/CardOverflow';
+import CommentIcon from '@mui/icons-material/Comment';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 class MainList extends React.Component {
     constructor(props) {
@@ -81,8 +84,8 @@ class MainList extends React.Component {
                 <Card variant="outlined" sx={{ minWidth: '320px' }} key={data.post_id} style={{marginTop:16}} onClick={this.handlePostClick.bind(this, data.user_id, data.post_id)}>
                     <Box sx={{ display: 'flex', gap: 1.5 }}>
                         <Avatar alt={data.user_name} src={"/image/" + data.photo} onClick={this.handleProfileClick.bind(this, data.user_id)}/>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                            <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, overflowX:'hidden' }}>
+                            <Typography level="h2" fontSize="md" sx={{ alignSelf: 'flex-start', width:'100%' }} noWrap>
                                 {data.post_name}
                             </Typography>
                             <Typography level="body2">{reg_date}</Typography>
@@ -102,6 +105,27 @@ class MainList extends React.Component {
                             </Typography>
                         </div>
                     </Box>
+                    <CardOverflow
+                        variant="soft"
+                        sx={{
+                        display: 'flex',
+                        gap: 1.5,
+                        py: 1.5,
+                        px: 'var(--Card-padding)',
+                        borderTop: '1px solid',
+                        borderColor: 'neutral.outlinedBorder',
+                        bgcolor: 'background.level1',
+                        marginTop:'16px'
+                        }}
+                    >
+                        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }} startDecorator={<CommentIcon />}>
+                            {data.commentCnt}
+                        </Typography>
+                        <Box sx={{ width: 2, bgcolor: 'divider' }} />
+                        <Typography level="body3" sx={{ fontWeight: 'md', color: 'text.secondary' }} startDecorator={<VisibilityIcon />}>
+                            {data.hit}
+                        </Typography>
+                    </CardOverflow>
                 </Card>
             )
         }

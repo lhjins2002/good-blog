@@ -137,11 +137,6 @@ export default function BlogComment() {
           var create_dt = year +'.'+month+'.'+day;
           var myComment = user_id == id ? true : false;
 
-          if(i != 0){
-            result.push(
-              <ListDivider inset={'startContent'} key={'divider' + i}/> 
-            )
-          }
 
           result.push(
             <ListItem key={comment_id}>
@@ -171,6 +166,11 @@ export default function BlogComment() {
                   </Typography>
               </ListItemContent>
             </ListItem>
+          )
+
+          //구분선 그리기
+          result.push(
+            <ListDivider inset={'startContent'} key={'divider' + i}/> 
           )
       }
       return result

@@ -54,6 +54,9 @@ router.post('/', (req, res, next) => {
     }else if(type == 'deleteComment'){
         req.body.crud = 'delete';//select, insert, update, delete 중에 입력
         req.body.mapper_id = 'deleteComment';
+    }else if(type == 'updatePostHit'){
+        req.body.crud = 'update';//select, insert, update, delete 중에 입력
+        req.body.mapper_id = 'updatePostHit';
     }
 
     router.use('/', dbconnect_Module);
