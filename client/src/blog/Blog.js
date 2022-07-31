@@ -3,14 +3,12 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiAppBar from '@mui/material/AppBar';
+import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import BlogCategory from './BlogCategory';
 import BlogList from './BlogList';
 import { useParams } from "react-router";
@@ -42,57 +40,13 @@ import ListItemText from '@mui/material/ListItemText';
 
 const drawerWidth = 240;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    flexGrow: 1,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(open && {
-      transition: theme.transitions.create('margin', {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  }),
-);
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-  transition: theme.transitions.create(['margin', 'width'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
-  ...(open && {
-    width: `calc(100% - ${drawerWidth}px)`,
-    marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(['margin', 'width'], {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  }),
-}));
-
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-end',
-}));
-
  const Blog = (props) => {
   //const theme = useTheme();
   let { owner_id } = useParams();
   let { post_id } = useParams();
   let { cate_id } = useParams();
   const navigate = useNavigate();
-  const [open, setOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const [auth, setAuth] = React.useState(false);
   const [loginId, setLoginId] = React.useState("");
@@ -129,12 +83,8 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     isView = true;
   }
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-
-  const handleDrawerClose = () => {
-    setOpen(false);
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
   };
 
   const handleMenu = (event) => {
@@ -173,7 +123,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   }
 
   React.useEffect(() => {
-    setOpen(false);
     setAnchorEl(null);
     // 컴포넌트 마운팅된 후 실행
     axios.post('/member?type=SessionConfirm', {
@@ -237,18 +186,39 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     .catch( error => {alert('작업중 오류가 발생하였습니다.');return false;} );
   }, [location, owner_id]);
 
+  const { window } = props;
+  const container = window !== undefined ? () => window().document.body : undefined;
+
+  const drawer = (
+    <div>
+      <Toolbar style={{padding:'0 16px'}}>
+        <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, textDecoration:'none', color:'#183F48', }}>
+            Good Blog
+          </Typography>
+      </Toolbar>
+      <Divider />
+      { !isManage && <BlogCategory owner_id={owner_id} /> }
+      { isManage && manageMenuArea }
+    </div>
+  );
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open} theme={theme} elevation={0} style={{borderBottom:'1px solid rgba(0, 0, 0, 0.12)'}}>
+      <AppBar position="fixed" 
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+        }} 
+        theme={theme} elevation={0} style={{borderBottom:'1px solid rgba(0, 0, 0, 0.12)'}}>
       <Container>
         <Toolbar className='mainToolbar'>
           <IconButton
             color="inherit"
             aria-label="open drawer"
-            onClick={handleDrawerOpen}
             edge="start"
-            sx={{ mr: 2, ...(open && { display: 'none' }) }}
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: 'none' } }}
           >
             <MenuIcon />
           </IconButton>
@@ -322,47 +292,56 @@ const DrawerHeader = styled('div')(({ theme }) => ({
         </Toolbar>
       </Container>
       </AppBar>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-            width: drawerWidth,
-            boxSizing: 'border-box',
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
+      <Box
+        component="nav"
+        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        aria-label="mailbox folders"
       >
-        <DrawerHeader>
-          <Typography variant="h6" noWrap component={Link} to="/" sx={{ flexGrow: 1, marginLeft:'8px', textDecoration:'none', color:'#183F48', }}>
-              Good Blog
-            </Typography>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        { !isManage && <BlogCategory owner_id={owner_id} /> }
-        { isManage && manageMenuArea }
-      </Drawer>
-      <Main open={open}>
-        <DrawerHeader />
-        { !isManage && isView &&
-          <Routes>
-            <Route path=':owner_id/:post_id' element={<BlogView owner_id={owner_id} post_id={post_id} />} />
-          </Routes>
-        }
-        { !isManage && !isView &&
-          <Routes>
-            <Route path=':owner_id' element={<BlogList owner_id={owner_id} />} />
-            <Route path=':owner_id/:cate_id' element={<BlogList owner_id={owner_id} cate_id={cate_id} />} />
-          </Routes>
-        }
-        { isManage && manageContentArea }
-      </Main>
-    </Box>
+         <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+        >
+          {drawer}
+        </Drawer>
+        <Drawer
+          variant="permanent"
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+          }}
+          open
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
+      >
+          <Toolbar />
+          { !isManage && isView &&
+            <Routes>
+              <Route path=':owner_id/:post_id' element={<BlogView owner_id={owner_id} post_id={post_id} />} />
+            </Routes>
+          }
+          { !isManage && !isView &&
+            <Routes>
+              <Route path=':owner_id' element={<BlogList owner_id={owner_id} />} />
+              <Route path=':owner_id/:cate_id' element={<BlogList owner_id={owner_id} cate_id={cate_id} />} />
+            </Routes>
+          }
+          { isManage && manageContentArea }
+        </Box>
+      </Box>
   );
 }
 export default Blog;
